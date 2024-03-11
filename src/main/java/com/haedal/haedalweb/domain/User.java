@@ -21,14 +21,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@Getter
 public class User {
 
     @Id
     @Column(name = "user_id", length = 31)
     private String id;
 
-    @Column(name = "password", length = 31)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "student_number")
