@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.controller;
 
 import com.haedal.haedalweb.dto.JoinDTO;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class JoinController {
     }
 
     @PostMapping("/join")
-    public String joinProcess(@RequestBody JoinDTO joinDTO){
+    public String joinProcess(@RequestBody @Valid JoinDTO joinDTO){
 
         joinService.joinProcess(joinDTO);
         return "ok";
