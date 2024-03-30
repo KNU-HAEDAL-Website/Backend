@@ -8,8 +8,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Profile {
     @Id
     @Column(name = "profile_id")
@@ -24,5 +33,6 @@ public class Profile {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sns_id")
+    @NonNull
     private Sns sns;
 }
