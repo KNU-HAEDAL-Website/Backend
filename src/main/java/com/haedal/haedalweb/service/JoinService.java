@@ -22,12 +22,13 @@ public class JoinService {
     public void joinProcess(JoinDTO joinDTO) {
         String userId = joinDTO.getUserId();
         String password = joinDTO.getPassword();
-        Long studentNumber = joinDTO.getStudentNumber();
+        Integer studentNumber = joinDTO.getStudentNumber();
         String userName = joinDTO.getUserName();
+        System.out.println(password);
+        boolean isExistingStudentNumber = userRepository.existsByStudentNumber(studentNumber);
+        boolean isExistingId = userRepository.existsById(userId);
 
-        Boolean isExist = userRepository.existsByStudentNumber(studentNumber);
-
-        if (isExist) {
+        if (isExistingId || isExistingStudentNumber) {
             return;
         }
 
@@ -36,7 +37,7 @@ public class JoinService {
                 .password(bCryptPasswordEncoder.encode(password))
                 .name(userName)
                 .studentNumber(studentNumber)
-                .role(Role.ADMIN)
+                .role(Role.CANDIDATE)
                 .profile(createProfileWithSns())
                 .build();
 
