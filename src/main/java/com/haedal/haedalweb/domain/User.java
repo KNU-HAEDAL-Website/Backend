@@ -30,9 +30,9 @@ public class User {
     @NonNull
     private String password;
 
-    @Column(name = "student_number")
+    @Column(name = "student_number", unique = true)
     @NonNull
-    private Long studentNumber;
+    private Integer studentNumber;
 
     @Column(name = "user_name", length = 15)
     @NonNull
