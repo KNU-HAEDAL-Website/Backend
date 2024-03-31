@@ -24,7 +24,7 @@ public class JoinService {
         String password = joinDTO.getPassword();
         Integer studentNumber = joinDTO.getStudentNumber();
         String userName = joinDTO.getUserName();
-        System.out.println(password);
+
         boolean isExistingStudentNumber = userRepository.existsByStudentNumber(studentNumber);
         boolean isExistingId = userRepository.existsById(userId);
 
@@ -37,7 +37,7 @@ public class JoinService {
                 .password(bCryptPasswordEncoder.encode(password))
                 .name(userName)
                 .studentNumber(studentNumber)
-                .role(Role.CANDIDATE)
+                .role(Role.ROLE_CANDIDATE)
                 .profile(createProfileWithSns())
                 .build();
 
