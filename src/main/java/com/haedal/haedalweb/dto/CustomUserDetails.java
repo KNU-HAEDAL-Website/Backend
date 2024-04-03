@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
             }
         });
 
-        return null;
+        return collection;
     }
 
     @Override
