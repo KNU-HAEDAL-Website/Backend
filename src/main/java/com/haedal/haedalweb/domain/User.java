@@ -8,11 +8,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -20,6 +19,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@Getter
 public class User {
 
     @Id
@@ -48,3 +48,12 @@ public class User {
     @NonNull
     private Profile profile;
 }
+
+/*
+{
+    "userId": "abc1233",
+    "password": "abcd1234!",
+    "studentNumber": 2011011111,
+    "userName": "조대성"
+}	
+ */
