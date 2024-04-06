@@ -1,18 +1,16 @@
 package com.haedal.haedalweb.dto;
 
 import com.haedal.haedalweb.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private final User user;
-
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
+    private final UserDetailsDTO userDetailsDTO;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -22,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
             @Override
             public String getAuthority() {
-                return user.getRole().name();
+                return userDetailsDTO.getRole().name();
             }
         });
 
@@ -31,12 +29,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userDetailsDTO.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getId();
+        return userDetailsDTO.getId();
     }
 
     @Override

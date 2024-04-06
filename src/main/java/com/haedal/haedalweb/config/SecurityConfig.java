@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.config;
 
+import com.haedal.haedalweb.jwt.JWTFilter;
 import com.haedal.haedalweb.jwt.JWTUtil;
 import com.haedal.haedalweb.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +45,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/admin").hasRole("CANDIDATE")
                         .anyRequest().authenticated());
+
+        //JWTFilter 등록
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);

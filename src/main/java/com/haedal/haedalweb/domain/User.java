@@ -48,3 +48,12 @@ public class User {
     @NonNull
     private Profile profile;
 }
+
+/*
+{
+    "userId": "abc1233",
+    "password": "abcd1234!",
+    "studentNumber": 2011011111,
+    "userName": "조대성"
+}	
+ */
