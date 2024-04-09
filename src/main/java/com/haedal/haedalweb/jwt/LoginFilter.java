@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.jwt;
 
-import com.haedal.haedalweb.dto.CustomUserDetails;
+import com.haedal.haedalweb.constants.LoginConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
+        cookie.setMaxAge(LoginConstants.REFRESH_TOKEN_COOKIE_EXPIRATION_TIME);
         //cookie.setSecure(true);
         //cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -55,11 +55,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String access = jwtUtil.createJwt("access", userId, role, 10*60*1000L);
-        String refresh = jwtUtil.createJwt("refresh", userId, role, 10*24*60*60*1000L);
+        String access = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, userId, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
+        String refresh = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, userId, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
 
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        response.setHeader(LoginConstants.ACCESS_TOKEN, access);
+        response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, refresh));
         response.setStatus(HttpStatus.OK.value());
     }
 

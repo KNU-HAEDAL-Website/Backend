@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.jwt;
 
-import io.jsonwebtoken.Jwt;
+import com.haedal.haedalweb.constants.LoginConstants;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,15 +18,15 @@ public class JWTUtil {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(LoginConstants.USERNAME_CLAIM, String.class);
     }
 
     public String getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(LoginConstants.ROLE_CLAIM, String.class);
     }
 
     public String getCategory(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(LoginConstants.CATEGORY_CLAIM, String.class);
     }
 
     public Boolean isExpired(String token) {
@@ -35,9 +35,9 @@ public class JWTUtil {
 
     public String createJwt(String category, String userId, String role, Long expiredMs) {
         return Jwts.builder()
-                .claim("category", category)
-                .claim("username", userId)
-                .claim("role", role)
+                .claim(LoginConstants.CATEGORY_CLAIM, category)
+                .claim(LoginConstants.USERNAME_CLAIM, userId)
+                .claim(LoginConstants.ROLE_CLAIM, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
