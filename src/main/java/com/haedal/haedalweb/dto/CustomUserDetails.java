@@ -1,6 +1,5 @@
 package com.haedal.haedalweb.dto;
 
-import com.haedal.haedalweb.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

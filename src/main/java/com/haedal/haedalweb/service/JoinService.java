@@ -6,18 +6,15 @@ import com.haedal.haedalweb.domain.Sns;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.JoinDTO;
 import com.haedal.haedalweb.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class JoinService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public JoinService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     public void joinProcess(JoinDTO joinDTO) {
         String userId = joinDTO.getUserId();
@@ -34,7 +31,7 @@ public class JoinService {
 
         User user = User.builder()
                 .id(userId)
-                .password(bCryptPasswordEncoder.encode(password))
+                .password(passwordEncoder.encode(password))
                 .name(userName)
                 .studentNumber(studentNumber)
                 .role(Role.ROLE_CANDIDATE)
