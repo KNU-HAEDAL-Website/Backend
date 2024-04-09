@@ -20,18 +20,18 @@ public class ReissueController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         //get refresh token
-        String refresh = null;
+        String refreshToken = null;
         Cookie[] cookies = request.getCookies();
 
         for (Cookie cookie : cookies) {
 
             if (cookie.getName().equals(LoginConstants.REFRESH_TOKEN)) {
 
-                refresh = cookie.getValue();
+                refreshToken = cookie.getValue();
             }
         }
 
-        if (refresh == null) {
+        if (refreshToken == null) {
 
             //response status code
             return ResponseEntity.badRequest().body(LoginConstants.REFRESH_TOKEN_NULL);
@@ -39,7 +39,7 @@ public class ReissueController {
 
         //expired check
         try {
-            jwtUtil.isExpired(refresh);
+            jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
 
             //response status code
@@ -47,7 +47,7 @@ public class ReissueController {
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(refresh);
+        String category = jwtUtil.getCategory(refreshToken);
 
         if (!category.equals(LoginConstants.REFRESH_TOKEN)) {
 
@@ -55,15 +55,28 @@ public class ReissueController {
             return ResponseEntity.badRequest().body(LoginConstants.INVALID_REFRESH_TOKEN);
         }
 
-        String username = jwtUtil.getUsername(refresh);
-        String role = jwtUtil.getRole(refresh);
+        String username = jwtUtil.getUsername(refreshToken);
+        String role = jwtUtil.getRole(refreshToken);
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, username, role, 10*60*1000L);
+        String newAccessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, username, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
+        String newRefreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, username, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
 
         //response
-        response.setHeader(LoginConstants.ACCESS_TOKEN, newAccess);
+        response.setHeader(LoginConstants.ACCESS_TOKEN, newAccessToken);
+        response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, newRefreshToken));
 
         return ResponseEntity.ok().build();
+    }
+
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(LoginConstants.REFRESH_TOKEN_COOKIE_EXPIRATION_TIME);
+        //cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }
