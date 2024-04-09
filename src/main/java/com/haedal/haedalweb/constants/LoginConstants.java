@@ -17,7 +17,7 @@ public final class LoginConstants {
     public static final String ROLE_CLAIM = "role";
     public static final String CATEGORY_CLAIM = "category";
 
-    public static final long ACCESS_TOKEN_EXPIRATION_TIME_MS = TimeUnit.HOURS.toMillis(1);
-    public static final long REFRESH_TOKEN_EXPIRATION_TIME_MS = TimeUnit.DAYS.toMillis(1);
-    public static final int REFRESH_TOKEN_COOKIE_EXPIRATION_TIME = (int) TimeUnit.DAYS.toSeconds(1);
+    public static final long ACCESS_TOKEN_EXPIRATION_TIME_MS = 3600*1000;
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME_MS = 86400*1000;
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME_S = 86400; // 1 day
 }
