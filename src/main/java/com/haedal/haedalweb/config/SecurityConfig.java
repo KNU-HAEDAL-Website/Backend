@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.config;
 
+import com.haedal.haedalweb.constants.LoginConstants;
 import com.haedal.haedalweb.jwt.JWTFilter;
 import com.haedal.haedalweb.jwt.JWTUtil;
 import com.haedal.haedalweb.jwt.LoginFilter;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -29,7 +31,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
@@ -51,7 +53,7 @@ public class SecurityConfig {
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                        configuration.setExposedHeaders(Collections.singletonList(LoginConstants.ACCESS_TOKEN));
 
                         return configuration;
                     }
