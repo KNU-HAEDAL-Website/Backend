@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.jwt;
 
 import com.haedal.haedalweb.constants.LoginConstants;
+import com.haedal.haedalweb.service.RedisService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final RedisService redisService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -37,7 +39,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(LoginConstants.REFRESH_TOKEN_COOKIE_EXPIRATION_TIME);
+        cookie.setMaxAge((int)LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_S);
         //cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
@@ -55,11 +57,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String access = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, userId, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
-        String refresh = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, userId, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
+        String accessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, userId, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
+        String refreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, userId, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
 
-        response.setHeader(LoginConstants.ACCESS_TOKEN, access);
-        response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, refresh));
+        redisService.saveRefreshToken(refreshToken, userId);
+
+        response.setHeader(LoginConstants.ACCESS_TOKEN, accessToken);
+        response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, refreshToken));
         response.setStatus(HttpStatus.OK.value());
     }
 
