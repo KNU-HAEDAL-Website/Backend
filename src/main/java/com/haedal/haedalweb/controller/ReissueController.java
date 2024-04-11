@@ -2,11 +2,13 @@ package com.haedal.haedalweb.controller;
 
 import com.haedal.haedalweb.constants.LoginConstants;
 import com.haedal.haedalweb.jwt.JWTUtil;
+import com.haedal.haedalweb.service.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReissueController {
 
     private final JWTUtil jwtUtil;
+    private final RedisService redisService;
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -55,12 +58,22 @@ public class ReissueController {
             return ResponseEntity.badRequest().body(LoginConstants.INVALID_REFRESH_TOKEN);
         }
 
+        boolean isExist = redisService.existsByRefreshToken(refreshToken);
+
+        if (!isExist) {
+
+            //response body
+            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+        }
+
         String username = jwtUtil.getUsername(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
-
         //make new JWT
         String newAccessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, username, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
         String newRefreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, username, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
+
+        redisService.deleteRefreshToken(refreshToken);
+        redisService.saveRefreshToken(newRefreshToken, username);
 
         //response
         response.setHeader(LoginConstants.ACCESS_TOKEN, newAccessToken);
@@ -72,7 +85,7 @@ public class ReissueController {
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(LoginConstants.REFRESH_TOKEN_COOKIE_EXPIRATION_TIME);
+        cookie.setMaxAge((int)LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_S);
         //cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
