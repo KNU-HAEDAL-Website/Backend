@@ -5,6 +5,8 @@ import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.Sns;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.JoinDTO;
+import com.haedal.haedalweb.exception.BusinessException;
+import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,18 +18,13 @@ public class JoinService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void joinProcess(JoinDTO joinDTO) {
+    public void createUserAccount(JoinDTO joinDTO) {
         String userId = joinDTO.getUserId();
         String password = joinDTO.getPassword();
         Integer studentNumber = joinDTO.getStudentNumber();
         String userName = joinDTO.getUserName();
 
-        boolean isExistingStudentNumber = userRepository.existsByStudentNumber(studentNumber);
-        boolean isExistingId = userRepository.existsById(userId);
-
-        if (isExistingId || isExistingStudentNumber) {
-            return;
-        }
+        validateJoinRequest(joinDTO);
 
         User user = User.builder()
                 .id(userId)
@@ -39,6 +36,24 @@ public class JoinService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    private void validateJoinRequest(JoinDTO joinDTO) {
+        if (isUserIdDuplicate(joinDTO.getUserId())) {
+            throw new BusinessException(ErrorCode.DUPLICATED_USER_ID);
+        }
+
+        if (isStudentNumberDuplicate(joinDTO.getStudentNumber())) {
+            throw new BusinessException(ErrorCode.DUPLICATED_STUDENT_NUMBER);
+        }
+    }
+
+    public boolean isUserIdDuplicate(String userId) {
+        return userRepository.existsById(userId);
+    }
+
+    public boolean isStudentNumberDuplicate(Integer studentNumber) {
+        return userRepository.existsByStudentNumber(studentNumber);
     }
 
     private Profile createProfileWithSns() {
