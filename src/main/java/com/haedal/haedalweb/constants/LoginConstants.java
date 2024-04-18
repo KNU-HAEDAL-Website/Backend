@@ -1,7 +1,5 @@
 package com.haedal.haedalweb.constants;
 
-import java.util.concurrent.TimeUnit;
-
 public final class LoginConstants {
     public static final String REFRESH_TOKEN_NULL = "refresh token null";
     public static final String REFRESH_TOKEN_EXPIRED = "refresh token expired";
@@ -13,7 +11,7 @@ public final class LoginConstants {
     public static final String REFRESH_TOKEN = "refreshToken";
     public static final String ACCESS_TOKEN = "Authorization";
 
-    public static final String USERNAME_CLAIM = "username";
+    public static final String USER_ID_CLAIM = "userId";
     public static final String ROLE_CLAIM = "role";
     public static final String CATEGORY_CLAIM = "category";
 

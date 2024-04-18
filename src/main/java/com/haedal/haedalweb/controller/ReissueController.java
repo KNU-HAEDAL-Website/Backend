@@ -66,14 +66,14 @@ public class ReissueController {
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
-        String username = jwtUtil.getUsername(refreshToken);
+        String userId = jwtUtil.getUserId(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
         //make new JWT
-        String newAccessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, username, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
-        String newRefreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, username, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
+        String newAccessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, userId, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
+        String newRefreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, userId, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
 
         redisService.deleteRefreshToken(refreshToken);
-        redisService.saveRefreshToken(newRefreshToken, username);
+        redisService.saveRefreshToken(newRefreshToken, userId);
 
         //response
         response.setHeader(LoginConstants.ACCESS_TOKEN, newAccessToken);

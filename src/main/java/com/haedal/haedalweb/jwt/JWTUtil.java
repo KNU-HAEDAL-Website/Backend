@@ -17,8 +17,8 @@ public class JWTUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String getUsername(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(LoginConstants.USERNAME_CLAIM, String.class);
+    public String getUserId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get(LoginConstants.USER_ID_CLAIM, String.class);
     }
 
     public String getRole(String token) {
@@ -36,7 +36,7 @@ public class JWTUtil {
     public String createJwt(String category, String userId, String role, Long expiredMs) {
         return Jwts.builder()
                 .claim(LoginConstants.CATEGORY_CLAIM, category)
-                .claim(LoginConstants.USERNAME_CLAIM, userId)
+                .claim(LoginConstants.USER_ID_CLAIM, userId)
                 .claim(LoginConstants.ROLE_CLAIM, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
