@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,7 +46,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
             loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
         } catch (IOException e) {
-            throw new AuthenticationServiceException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE.getMessage(), e);
+            throw new AuthenticationServiceException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE.getMessage());
         }
 
         String userId = loginDTO.getUserId();
@@ -89,6 +90,34 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        if (failed instanceof AuthenticationServiceException) {
+            ErrorCode errorCode = ErrorCode.INVALID_LOGIN_CONTENTS_TYPE;
+            response.setStatus(errorCode.getHttpStatus().value());
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .message(errorCode.getMessage())
+                    .build();
+            try {
+                String jsonData = new ObjectMapper().writeValueAsString(errorResponse);
+                response.getWriter().write(jsonData);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+            return;
+        }
+
+        ErrorCode errorCode = ErrorCode.FAILED_LOGIN;
+        response.setStatus(errorCode.getHttpStatus().value());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(errorCode.getMessage())
+                .build();
+        try {
+            String jsonData = new ObjectMapper().writeValueAsString(errorResponse);
+            response.getWriter().write(jsonData);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 }
