@@ -3,9 +3,10 @@ package com.haedal.haedalweb.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.LoginConstants;
+import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.ErrorResponse;
 import com.haedal.haedalweb.dto.LoginDTO;
-import com.haedal.haedalweb.exception.BusinessException;
+import com.haedal.haedalweb.dto.SuccessResponse;
 import com.haedal.haedalweb.service.RedisService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -14,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -86,6 +86,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader(LoginConstants.ACCESS_TOKEN, accessToken);
         response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, refreshToken));
         response.setStatus(HttpStatus.OK.value());
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        SuccessCode successCode = SuccessCode.LOGIN_SUCCESS;
+        response.setStatus(successCode.getHttpStatus().value());
+        SuccessResponse successResponse = SuccessResponse.builder()
+                .success(true)
+                .message(successCode.getMessage())
+                .build();
+
+        try {
+            String jsonData = new ObjectMapper().writeValueAsString(successResponse);
+            response.getWriter().write(jsonData);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Override
