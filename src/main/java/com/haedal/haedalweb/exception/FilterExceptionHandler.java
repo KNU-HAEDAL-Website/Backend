@@ -23,11 +23,11 @@ public class FilterExceptionHandler extends GenericFilterBean {
         try {
             doFilter(request, response, chain);
         } catch (BusinessException e) {
-            sendErrorResponse(request, response, e);
+            sendErrorResponse(response, e);
         }
     }
 
-    private void sendErrorResponse(HttpServletRequest request, HttpServletResponse response, BusinessException e) {
+    private void sendErrorResponse(HttpServletResponse response, BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
         response.setStatus(errorCode.getHttpStatus().value());
         ErrorResponse errorResponse = ErrorResponse.builder()
