@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.config;
 
 import com.haedal.haedalweb.constants.LoginConstants;
+import com.haedal.haedalweb.exception.FilterExceptionHandler;
 import com.haedal.haedalweb.jwt.CustomLogoutFilter;
 import com.haedal.haedalweb.jwt.JWTFilter;
 import com.haedal.haedalweb.jwt.JWTUtil;
@@ -86,7 +87,14 @@ public class SecurityConfig {
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService), UsernamePasswordAuthenticationFilter.class);
 
         http
-                .addFilterBefore(new CustomLogoutFilter(jwtUtil, redisService), LogoutFilter.class);
+                .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class);
+
+        http
+                .logout((auth) -> auth.disable());
+
+        http
+                .addFilterAfter(new CustomLogoutFilter(jwtUtil, redisService), LogoutFilter.class);
+
 
         http
                 .sessionManagement((session) -> session

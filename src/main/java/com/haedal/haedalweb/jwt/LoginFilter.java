@@ -7,8 +7,10 @@ import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.ErrorResponse;
 import com.haedal.haedalweb.dto.LoginDTO;
 import com.haedal.haedalweb.dto.SuccessResponse;
+import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.service.RedisService;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -106,35 +108,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         if (failed instanceof AuthenticationServiceException) {
-            ErrorCode errorCode = ErrorCode.INVALID_LOGIN_CONTENTS_TYPE;
-            response.setStatus(errorCode.getHttpStatus().value());
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message(errorCode.getMessage())
-                    .build();
-            try {
-                String jsonData = new ObjectMapper().writeValueAsString(errorResponse);
-                response.getWriter().write(jsonData);
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-            return;
+            throw new BusinessException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE);
         }
 
-        ErrorCode errorCode = ErrorCode.FAILED_LOGIN;
-        response.setStatus(errorCode.getHttpStatus().value());
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message(errorCode.getMessage())
-                .build();
-        try {
-            String jsonData = new ObjectMapper().writeValueAsString(errorResponse);
-            response.getWriter().write(jsonData);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
+        throw new BusinessException(ErrorCode.FAILED_LOGIN);
     }
 }
