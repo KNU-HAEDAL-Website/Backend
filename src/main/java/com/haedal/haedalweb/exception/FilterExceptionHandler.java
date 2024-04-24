@@ -1,8 +1,8 @@
 package com.haedal.haedalweb.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.dto.ErrorResponse;
+import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -21,7 +21,7 @@ public class FilterExceptionHandler extends GenericFilterBean {
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
-            doFilter(request, response, chain);
+            chain.doFilter(request, response);
         } catch (BusinessException e) {
             sendErrorResponse(response, e);
         }
@@ -33,11 +33,7 @@ public class FilterExceptionHandler extends GenericFilterBean {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(errorCode.getMessage())
                 .build();
-        try {
-            String jsonData = new ObjectMapper().writeValueAsString(errorResponse);
-            response.getWriter().write(jsonData);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-        }
+
+        ResponseUtil.writeAsJsonResponse(response, errorResponse);
     }
 }

@@ -6,7 +6,6 @@ import com.haedal.haedalweb.jwt.CustomLogoutFilter;
 import com.haedal.haedalweb.jwt.JWTFilter;
 import com.haedal.haedalweb.jwt.JWTUtil;
 import com.haedal.haedalweb.jwt.LoginFilter;
-import com.haedal.haedalweb.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,11 +40,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RedisService redisService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) throws Exception {
 
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
@@ -84,7 +82,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class);
@@ -93,7 +91,7 @@ public class SecurityConfig {
                 .logout((auth) -> auth.disable());
 
         http
-                .addFilterAfter(new CustomLogoutFilter(jwtUtil, redisService), LogoutFilter.class);
+                .addFilterAfter(new CustomLogoutFilter(jwtUtil), LogoutFilter.class);
 
 
         http

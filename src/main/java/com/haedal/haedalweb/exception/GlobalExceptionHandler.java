@@ -3,6 +3,7 @@ package com.haedal.haedalweb.exception;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.dto.ErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
