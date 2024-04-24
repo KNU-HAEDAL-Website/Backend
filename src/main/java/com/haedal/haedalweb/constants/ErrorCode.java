@@ -15,7 +15,8 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "Access Token is invalid."),
     NULL_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token is null."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token has expired."),
-    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token is invalid.");
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "Refresh Token is invalid."),
+    INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "Parameter is invalid.");
 
     private final HttpStatus httpStatus;
     private final String message;
