@@ -5,8 +5,6 @@ import com.haedal.haedalweb.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class RedisService {
@@ -14,10 +12,6 @@ public class RedisService {
 
     public void saveRefreshToken(String token, String userId) {
         refreshTokenRepository.save(new RefreshToken(token, userId));
-    }
-
-    public boolean existsByRefreshToken(String token) {
-        return refreshTokenRepository.existsById(token);
     }
 
     public void deleteRefreshToken(String token) {

@@ -2,18 +2,15 @@ package com.haedal.haedalweb.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haedal.haedalweb.constants.ErrorCode;
-import com.haedal.haedalweb.constants.LoginConstants;
-import com.haedal.haedalweb.dto.ErrorResponse;
+import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.LoginDTO;
 import com.haedal.haedalweb.exception.BusinessException;
-import com.haedal.haedalweb.service.RedisService;
+import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -30,23 +26,12 @@ import java.util.Iterator;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final RedisService redisService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        LoginDTO loginDTO;
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ServletInputStream inputStream = request.getInputStream();
-            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-            loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
-        } catch (IOException e) {
-            throw new AuthenticationServiceException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE.getMessage(), e);
-        }
+        LoginDTO loginDTO = parseLoginRequest(request);
 
         String userId = loginDTO.getUserId();
         String password = loginDTO.getPassword();
@@ -56,39 +41,36 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         return authenticationManager.authenticate(authToken);
     }
 
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge((int)LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_S);
-        //cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-
         String userId = authentication.getName();
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String accessToken = jwtUtil.createJwt(LoginConstants.ACCESS_TOKEN, userId, role, LoginConstants.ACCESS_TOKEN_EXPIRATION_TIME_MS);
-        String refreshToken = jwtUtil.createJwt(LoginConstants.REFRESH_TOKEN, userId, role, LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_MS);
-
-        redisService.saveRefreshToken(refreshToken, userId);
-
-        response.setHeader(LoginConstants.ACCESS_TOKEN, accessToken);
-        response.addCookie(createCookie(LoginConstants.REFRESH_TOKEN, refreshToken));
-        response.setStatus(HttpStatus.OK.value());
+        jwtUtil.issueToken(response, userId, role);
+        ResponseUtil.sendSuccessResponse(response, SuccessCode.LOGIN_SUCCESS);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+        if (failed instanceof AuthenticationServiceException) {
+            throw new BusinessException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE);
+        }
+
+        throw new BusinessException(ErrorCode.FAILED_LOGIN);
+    }
+
+    private LoginDTO parseLoginRequest(HttpServletRequest request) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ServletInputStream inputStream = request.getInputStream();
+            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+
+            return objectMapper.readValue(messageBody, LoginDTO.class);
+        } catch (IOException e) {
+            throw new AuthenticationServiceException(ErrorCode.INVALID_LOGIN_CONTENTS_TYPE.getMessage());
+        }
     }
 }

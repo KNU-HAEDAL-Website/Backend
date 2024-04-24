@@ -3,6 +3,7 @@ package com.haedal.haedalweb.controller;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.JoinDTO;
 import com.haedal.haedalweb.dto.SuccessResponse;
+import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +27,7 @@ public class JoinController {
     public ResponseEntity<SuccessResponse> resisterUser(@RequestBody @Valid JoinDTO joinDTO) {
         joinService.createUserAccount(joinDTO);
 
-        SuccessCode successCode = SuccessCode.JOIN_SUCCESS;
-        SuccessResponse successResponse = SuccessResponse.builder()
-                .success(successCode.getSuccess())
-                .message(successCode.getMessage())
-                .build();
-
-        return ResponseEntity.status(successCode.getHttpStatus()).body(successResponse);
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
 
     @GetMapping("/check-user-id")
@@ -42,12 +37,7 @@ public class JoinController {
             successCode = SuccessCode.DUPLICATED_USER_ID;
         }
 
-        SuccessResponse successResponse = SuccessResponse.builder()
-                .success(successCode.getSuccess())
-                .message(successCode.getMessage())
-                .build();
-
-        return ResponseEntity.status(successCode.getHttpStatus()).body(successResponse);
+        return ResponseUtil.buildSuccessResponseEntity(successCode);
     }
 
     @GetMapping("/check-student-number")
@@ -57,11 +47,6 @@ public class JoinController {
             successCode = SuccessCode.DUPLICATED_STUDENT_NUMBER;
         }
 
-        SuccessResponse successResponse = SuccessResponse.builder()
-                .success(successCode.getSuccess())
-                .message(successCode.getMessage())
-                .build();
-
-        return ResponseEntity.status(successCode.getHttpStatus()).body(successResponse);
+        return ResponseUtil.buildSuccessResponseEntity(successCode);
     }
 }
