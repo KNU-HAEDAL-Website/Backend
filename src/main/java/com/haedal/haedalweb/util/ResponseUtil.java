@@ -15,7 +15,7 @@ public class ResponseUtil {
         response.setStatus(successCode.getHttpStatus().value());
 
         SuccessResponse successResponse = SuccessResponse.builder()
-                .success(true)
+                .success(successCode.getSuccess())
                 .message(successCode.getMessage())
                 .build();
 
