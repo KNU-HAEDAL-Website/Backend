@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
 
@@ -44,6 +45,7 @@ public class GlobalExceptionHandler {
 
         return ErrorResponse.builder()
                 .message(errorCode.getMessage())
+                .code(errorCode.getCode())
                 .errors(validationErrorList)
                 .build();
     }
