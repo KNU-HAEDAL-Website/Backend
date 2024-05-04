@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 @Getter
-public enum SuccessCode {
+public enum SuccessCode implements ResponseCode{
     JOIN_SUCCESS(HttpStatus.CREATED, true, "회원가입을 축하드립니다."),
     UNIQUE_USER_ID(HttpStatus.OK, true, "사용 가능한 ID입니다."),
     DUPLICATED_USER_ID(HttpStatus.OK, false, "중복된 ID입니다. 다른 ID를 입력해 주세요."),

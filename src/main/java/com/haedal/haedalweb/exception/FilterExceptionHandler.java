@@ -31,6 +31,7 @@ public class FilterExceptionHandler extends GenericFilterBean {
         ErrorCode errorCode = e.getErrorCode();
         response.setStatus(errorCode.getHttpStatus().value());
         ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
 
