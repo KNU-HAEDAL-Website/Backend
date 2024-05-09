@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 .env
+src/test
 
 .idea
 *.iws
