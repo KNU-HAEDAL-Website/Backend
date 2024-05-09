@@ -23,7 +23,6 @@ public class ReissueController {
 
     @Operation(summary = "JWT 재발급")
     @ApiSuccessCodeExample(SuccessCode.REISSUE_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NULL_REFRESH_TOKEN, ErrorCode.EXPIRED_REFRESH_TOKEN, ErrorCode.INVALID_REFRESH_TOKEN})
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
         issueService.reissueToken(request, response);
