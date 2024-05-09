@@ -8,25 +8,28 @@ services:
       - haedal-mysql
       - haedal-redis
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://haedal-mysql:3306/haedal?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: 7854
-      SPRING_DATA_REDIS_HOST: haedal-redis
-      SPRING_DATA_REDIS_PORT: 6379
-      SPRING_DATA_REDIS_PASSWORD: 7854
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATA_REDIS_HOST: ${SPRING_DATA_REDIS_HOST}
+      SPRING_DATA_REDIS_PORT: ${SPRING_DATA_REDIS_PORT}
+      SPRING_DATA_REDIS_PASSWORD: ${SPRING_DATA_REDIS_PASSWORD}
+      SPRING_JWT_SECRET_KEY: ${SPRING_JWT_SECRET_KEY}
   haedal-mysql:
     image: mysql:8.0.36
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: haedal
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 7854
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
   haedal-redis:
     image: redis:7.2-alpine
+    command: redis-server --requirepass ${SPRING_DATA_REDIS_PASSWORD} --port 6379
     ports:
       - "6379:6379"
 
