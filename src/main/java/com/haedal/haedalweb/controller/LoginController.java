@@ -24,7 +24,6 @@ public class LoginController {
 
     @Operation(summary = "로그아웃 API")
     @ApiSuccessCodeExample(SuccessCode.LOGOUT_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NULL_REFRESH_TOKEN, ErrorCode.INVALID_REFRESH_TOKEN, ErrorCode.EXPIRED_REFRESH_TOKEN})
     @PostMapping("/logout")
     public void signIn() {
     }
