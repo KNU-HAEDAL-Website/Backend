@@ -21,7 +21,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Spring Boot Build
-        run: ./gradlew clean build
+        run: ./gradlew build
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
