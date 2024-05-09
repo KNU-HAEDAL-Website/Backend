@@ -18,8 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-application-db.properties
-application-jwt.properties
+.env
 
 .idea
 *.iws
