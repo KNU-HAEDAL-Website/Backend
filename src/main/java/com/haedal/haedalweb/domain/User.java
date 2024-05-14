@@ -44,6 +44,11 @@ public class User {
     @NonNull
     private Role role;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @NonNull
+    private Status status;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     @NonNull
