@@ -3,6 +3,7 @@ package com.haedal.haedalweb.service;
 import com.haedal.haedalweb.domain.Profile;
 import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.Sns;
+import com.haedal.haedalweb.domain.Status;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.JoinDTO;
 import com.haedal.haedalweb.exception.BusinessException;
@@ -11,6 +12,7 @@ import com.haedal.haedalweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class JoinService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public void createUserAccount(JoinDTO joinDTO) {
         String userId = joinDTO.getUserId();
         String password = joinDTO.getPassword();
@@ -31,7 +34,8 @@ public class JoinService {
                 .password(passwordEncoder.encode(password))
                 .name(userName)
                 .studentNumber(studentNumber)
-                .role(Role.ROLE_CANDIDATE)
+                .role(Role.ROLE_MEMBER)
+                .status(Status.INACTIVE)
                 .profile(createProfileWithSns())
                 .build();
 
