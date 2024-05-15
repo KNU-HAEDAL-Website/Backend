@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-    ROLE_ADMIN("관리자"),
-    ROLE_STAFF("해구르르"),
+    ROLE_WEB_MASTER("관리자"),
+    ROLE_ADMIN("해구르르"),
     ROLE_TEAM_LEADER("팀장"),
     ROLE_MEMBER("일반");
 
