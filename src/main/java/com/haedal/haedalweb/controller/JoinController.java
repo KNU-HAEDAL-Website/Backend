@@ -41,6 +41,16 @@ public class JoinController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
 
+    @Operation(summary = "관리자 회원가입 (개발용)")
+    @ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.INVALID_PARAMETER})
+    @PostMapping("/admin")
+    public ResponseEntity<SuccessResponse> resisterAdmin(@RequestBody @Valid JoinDTO joinDTO) {
+        joinService.createAdminAccount(joinDTO);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
+    }
+
     @Operation(summary = "ID 중복확인")
     @Parameter(name = "userId", description = "중복 확인할 ID")
     @ApiSuccessCodeExamples({SuccessCode.UNIQUE_USER_ID, SuccessCode.DUPLICATED_USER_ID})
