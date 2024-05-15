@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,10 +46,14 @@ public class User {
     @NonNull
     private Role role;
 
-    @Column(name = "status")
+    @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
     @NonNull
-    private Status status;
+    private UserStatus userStatus;
+
+    @Column(name = "reg_date")
+    @NonNull
+    private LocalDateTime regDate;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
