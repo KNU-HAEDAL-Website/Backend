@@ -16,7 +16,8 @@ public enum ErrorCode implements ResponseCode{
     INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "007", "Access Token is invalid."),
     NULL_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "008", "Refresh Token is null."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "009", "Refresh Token has expired."),
-    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "010", "Refresh Token is invalid.");
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "010", "Refresh Token is invalid."),
+    NOT_FOUND_ID(HttpStatus.NOT_FOUND, "011", "ID Not Found");
 
     private final HttpStatus httpStatus;
     private final String code;
