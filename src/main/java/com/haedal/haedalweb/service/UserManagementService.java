@@ -15,14 +15,16 @@ public class UserManagementService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void updateUserStatusToActivated(String userId) {
+    public void updateUserStatus(String userId, UserStatus userStatus) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ID));
 
-        if (user.getUserStatus() == UserStatus.INACTIVE) {
-            user.setUserStatus(UserStatus.ACTIVE);
-            userRepository.save(user);
+        if (user.getUserStatus() == UserStatus.MASTER) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ID);
         }
+
+        user.setUserStatus(userStatus);
+        userRepository.save(user);
     }
 
     @Transactional
