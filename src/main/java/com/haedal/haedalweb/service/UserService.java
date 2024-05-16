@@ -8,7 +8,11 @@ import com.haedal.haedalweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -16,14 +20,28 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Page<ActiveUserDTO> getActiveUsers(Pageable pageable) {
-        Page<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, pageable);
-        return users.map(this::convertToActiveUserDTO);
+
+//    public Page<ActiveUserDTO> getUsers(Pageable pageable) {
+//        Page<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, pageable);
+//        return users.map(this::convertToActiveUserDTO);
+//    }
+
+    public List<ActiveUserDTO> getActiveUsers() {
+        Sort sort = Sort.by(Sort.Order.asc("role"), Sort.Order.asc("name"));
+        List<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, sort);
+
+        return users.stream()
+                .map(this::convertToActiveUserDTO)
+                .collect(Collectors.toList());
     }
 
-    public Page<InActiveUserDTO> getInActiveUsers(Pageable pageable) {
-        Page<User> users = userRepository.findByUserStatus(UserStatus.INACTIVE, pageable);
-        return users.map(this::convertToInActiveUserDTO);
+    public List<InActiveUserDTO> getInActiveUsers() {
+        Sort sort = Sort.by(Sort.Order.asc("regDate"), Sort.Order.asc("name"));
+        List<User> users = userRepository.findByUserStatus(UserStatus.INACTIVE, sort);
+
+        return users.stream()
+                .map(this::convertToInActiveUserDTO)
+                .collect(Collectors.toList());
     }
 
     private ActiveUserDTO convertToActiveUserDTO(User user) {
