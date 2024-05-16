@@ -74,7 +74,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**").permitAll()
-                        .requestMatchers("/admin/**").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers("/admin/**", "users/inactive").hasAnyRole("WEB_MASTER", "ADMIN")
                         .anyRequest().authenticated());
 
         //JWTFilter 등록
