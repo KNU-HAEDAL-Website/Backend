@@ -2,6 +2,7 @@ package com.haedal.haedalweb.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.User;
+import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.CustomUserDetails;
 import com.haedal.haedalweb.dto.UserDetailsDTO;
 import com.haedal.haedalweb.repository.UserRepository;
@@ -20,6 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.FAILED_LOGIN.getMessage()));
+
+        if (user.getUserStatus() == UserStatus.DELETED) {
+            throw new UsernameNotFoundException(ErrorCode.FAILED_LOGIN.getMessage());
+        }
 
         UserDetailsDTO userDetailsDTO = UserDetailsDTO.builder()
                 .id(user.getId())
