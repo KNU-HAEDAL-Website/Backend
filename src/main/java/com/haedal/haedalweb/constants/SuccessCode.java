@@ -17,7 +17,8 @@ public enum SuccessCode implements ResponseCode{
     DUPLICATED_STUDENT_NUMBER(HttpStatus.OK, false, "중복된 학번입니다. 다시 확인해 주세요."),
     LOGIN_SUCCESS(HttpStatus.OK, true, "로그인에 성공했습니다."),
     LOGOUT_SUCCESS(HttpStatus.OK, true, "로그아웃에 성공했습니다."),
-    REISSUE_SUCCESS(HttpStatus.OK, true, "토큰을 재발급했습니다.");
+    REISSUE_SUCCESS(HttpStatus.OK, true, "토큰을 재발급했습니다."),
+    UPDATE_ROLE(HttpStatus.OK, true, "유저의 권한을 변경했습니다.");
 
 
     private final HttpStatus httpStatus;
