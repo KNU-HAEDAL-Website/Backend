@@ -20,7 +20,7 @@ public class UserManagementService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ID));
 
-        if (user.getUserStatus() != UserStatus.ACTIVE) {
+        if (user.getUserStatus() != UserStatus.ACTIVE && user.getUserStatus() != UserStatus.INACTIVE) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ID);
         }
 
