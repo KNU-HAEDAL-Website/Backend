@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +34,7 @@ public class UserManagementController {
     @ApiSuccessCodeExample(SuccessCode.JOIN_APPROVAL)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_ID)
     @Parameter(name = "userId", description = "가입 승인할 유저 ID")
-    @PutMapping("/{userId}/approve")
+    @PatchMapping("/{userId}/approve")
     public ResponseEntity<SuccessResponse> approveUser(@PathVariable String userId) {
         userManagementService.updateUserStatus(userId, UserStatus.ACTIVE);
 
@@ -56,7 +56,7 @@ public class UserManagementController {
     @ApiSuccessCodeExample(SuccessCode.EXPEL_USER)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_ID)
     @Parameter(name = "userId", description = "내보낼 유저 ID")
-    @PutMapping("/{userId}/expel")
+    @PatchMapping("/{userId}/expel")
     public ResponseEntity<SuccessResponse> expelUser(@PathVariable String userId) {
         userManagementService.updateUserStatus(userId, UserStatus.DELETED);
 
@@ -67,7 +67,7 @@ public class UserManagementController {
     @ApiSuccessCodeExample(SuccessCode.UPDATE_ROLE)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ID, ErrorCode.NOT_FOUND_ROLE})
     @Parameter(name = "userId", description = "권한 변경할 유저 ID")
-    @PutMapping("/{userId}/role")
+    @PatchMapping("/{userId}/role")
     public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody RoleUpdateDTO roleUpdateDTO) {
         userManagementService.updateUserRole(userId, roleUpdateDTO.getRole());
 
