@@ -1,41 +1,15 @@
 package com.haedal.haedalweb.controller;
 
-import com.haedal.haedalweb.dto.ActiveUserDTO;
-import com.haedal.haedalweb.dto.InActiveUserDTO;
-import com.haedal.haedalweb.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
-@Tag(name = "User 목록 API")
+@Tag(name = "User API")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final UserService userService;
-
-    @Operation(summary = "활동중인 User 목록")
-    @GetMapping("/active")
-    public ResponseEntity<List<ActiveUserDTO>> getActiveUser(){
-        List<ActiveUserDTO> activeUsers = userService.getActiveUsers();
-
-        return ResponseEntity.ok(activeUsers);
-    }
-
-    @Operation(summary = "가입 대기 중인 User 목록")
-    @GetMapping("/inactive")
-    public ResponseEntity<List<InActiveUserDTO>> getInActiveUser(){
-        List<InActiveUserDTO> inActiveUsers = userService.getInActiveUsers();
-
-        return ResponseEntity.ok(inActiveUsers);
-    }
 
 //    @Operation(summary = "User 목록")
 //    @Parameters({
