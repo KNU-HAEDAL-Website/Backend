@@ -5,7 +5,7 @@ import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.Sns;
 import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.domain.User;
-import com.haedal.haedalweb.dto.JoinDTO;
+import com.haedal.haedalweb.dto.request.JoinDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.repository.UserRepository;

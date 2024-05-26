@@ -2,7 +2,7 @@ package com.haedal.haedalweb.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.SuccessResponse;
+import com.haedal.haedalweb.dto.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

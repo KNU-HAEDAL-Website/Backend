@@ -1,7 +1,7 @@
 package com.haedal.haedalweb.exception;
 
 import com.haedal.haedalweb.constants.ErrorCode;
-import com.haedal.haedalweb.dto.ErrorResponse;
+import com.haedal.haedalweb.dto.response.ErrorResponse;
 import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

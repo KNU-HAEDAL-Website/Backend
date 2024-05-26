@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.dto;
+package com.haedal.haedalweb.dto.request;
 
 import com.haedal.haedalweb.domain.Role;
 import io.swagger.v3.oas.annotations.media.Schema;

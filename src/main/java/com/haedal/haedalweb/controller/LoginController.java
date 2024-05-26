@@ -2,7 +2,7 @@ package com.haedal.haedalweb.controller;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.LoginDTO;
+import com.haedal.haedalweb.dto.request.LoginDTO;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import io.swagger.v3.oas.annotations.Operation;
