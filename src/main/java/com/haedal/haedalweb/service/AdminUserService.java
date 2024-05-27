@@ -60,10 +60,10 @@ public class AdminUserService {
     @Transactional
     public void updateUserStatus(String userId, UserStatus userStatus) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ID));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
 
         if (user.getUserStatus() != UserStatus.ACTIVE && user.getUserStatus() != UserStatus.INACTIVE) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ID);
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
         user.setUserStatus(userStatus);
@@ -73,10 +73,10 @@ public class AdminUserService {
     @Transactional
     public void deleteUser(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ID));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
 
         if (user.getUserStatus() != UserStatus.INACTIVE) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ID);
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
         userRepository.delete(user);
@@ -85,10 +85,10 @@ public class AdminUserService {
     @Transactional
     public void updateUserRole(String userId, Role role) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ID));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
 
         if (user.getUserStatus() != UserStatus.ACTIVE) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ID);
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
         user.setRole(role);

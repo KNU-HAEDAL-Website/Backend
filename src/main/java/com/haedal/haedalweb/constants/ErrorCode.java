@@ -17,9 +17,9 @@ public enum ErrorCode implements ResponseCode{
     NULL_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "008", "Refresh Token is null."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "009", "Refresh Token has expired."),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "010", "Refresh Token is invalid."),
-    NOT_FOUND_ID(HttpStatus.NOT_FOUND, "011", "ID Not Found"),
-    NOT_FOUND_ROLE(HttpStatus.NOT_FOUND, "012", "ROLE Not Found");
-
+    NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "011", "유저 아이디를 찾을 수 없습니다."),
+    NOT_FOUND_ROLE(HttpStatus.NOT_FOUND, "012", "해당하는 권한을 찾을 수 없습니다."),
+    DUPLICATED_SEMESTER(HttpStatus.CONFLICT, "013", "이미 해당 학기가 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

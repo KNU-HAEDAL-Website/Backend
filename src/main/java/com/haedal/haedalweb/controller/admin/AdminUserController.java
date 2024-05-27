@@ -52,7 +52,7 @@ public class AdminUserController {
 
     @Operation(summary = "가입 승인")
     @ApiSuccessCodeExample(SuccessCode.JOIN_APPROVAL)
-    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_ID)
+    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
     @Parameter(name = "userId", description = "가입 승인할 유저 ID")
     @PatchMapping("/{userId}/approve")
     public ResponseEntity<SuccessResponse> approveUser(@PathVariable String userId) {
@@ -63,7 +63,7 @@ public class AdminUserController {
 
     @Operation(summary = "가입 거절")
     @ApiSuccessCodeExample(SuccessCode.JOIN_REFUSAL)
-    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_ID)
+    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
     @Parameter(name = "userId", description = "가입 거절할 유저 ID")
     @DeleteMapping("/{userId}/reject")
     public ResponseEntity<SuccessResponse> rejectUser(@PathVariable String userId) {
@@ -74,7 +74,7 @@ public class AdminUserController {
 
     @Operation(summary = "유저 내보내기")
     @ApiSuccessCodeExample(SuccessCode.EXPEL_USER)
-    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_ID)
+    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
     @Parameter(name = "userId", description = "내보낼 유저 ID")
     @PatchMapping("/{userId}/expel")
     public ResponseEntity<SuccessResponse> expelUser(@PathVariable String userId) {
@@ -85,7 +85,7 @@ public class AdminUserController {
 
     @Operation(summary = "유저 권한 변경")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_ROLE)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ID, ErrorCode.NOT_FOUND_ROLE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ROLE})
     @Parameter(name = "userId", description = "권한 변경할 유저 ID")
     @PatchMapping("/{userId}/role")
     public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody RoleUpdateDTO roleUpdateDTO) {
