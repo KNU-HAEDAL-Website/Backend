@@ -1,11 +1,12 @@
 package com.haedal.haedalweb.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginDTO {
     @Schema(description = "유저 아이디", example = "haedal12")
     private String userId;
