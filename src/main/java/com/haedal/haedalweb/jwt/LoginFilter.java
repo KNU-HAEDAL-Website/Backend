@@ -3,7 +3,7 @@ package com.haedal.haedalweb.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.LoginDTO;
+import com.haedal.haedalweb.dto.request.LoginDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.servlet.FilterChain;

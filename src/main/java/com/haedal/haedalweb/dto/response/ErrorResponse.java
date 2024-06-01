@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.dto;
+package com.haedal.haedalweb.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
