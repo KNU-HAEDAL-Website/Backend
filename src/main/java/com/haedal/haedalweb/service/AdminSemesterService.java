@@ -26,6 +26,14 @@ public class AdminSemesterService {
         semesterRepository.save(semester);
     }
 
+    public void deleteSemester(Long semesterId) {
+        Semester semester = semesterRepository.findById(semesterId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
+
+        // 학기 안에 활동이 존재할 때, 에러 코드 반환하는 로직 작성
+        semesterRepository.delete(semester);
+    }
+
     private void validateAddSemesterRequest(SemesterCreationDTO semesterCreationDTO) {
         if (isSemesterDuplicate(semesterCreationDTO.getSemesterName())) {
             throw new BusinessException(ErrorCode.DUPLICATED_SEMESTER);
