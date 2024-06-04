@@ -6,6 +6,7 @@ import com.haedal.haedalweb.dto.request.SemesterCreationDTO;
 import com.haedal.haedalweb.dto.response.SuccessResponse;
 import com.haedal.haedalweb.service.AdminSemesterService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
+import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "관리자 - 학기 관리 API")
-@RequestMapping("/admin/semester")
+@RequestMapping("/admin/semesters")
 @RequiredArgsConstructor
 @RestController
 public class AdminSemesterController {
@@ -40,7 +41,7 @@ public class AdminSemesterController {
 
     @Operation(summary = "학기 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_SEMESTER_SUCCESS)
-    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_SEMESTER_ID)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_SEMESTER_ID, ErrorCode.EXIST_ACTIVITY})
     @Parameter(name = "semesterId", description = "삭제할 학기 ID")
     @DeleteMapping("/{semesterId}")
     public ResponseEntity<SuccessResponse> deleteSemester(@PathVariable Long semesterId) {

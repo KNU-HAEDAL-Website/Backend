@@ -20,7 +20,10 @@ public enum SuccessCode implements ResponseCode{
     REISSUE_SUCCESS(HttpStatus.OK, true, "토큰을 재발급했습니다."),
     UPDATE_ROLE(HttpStatus.OK, true, "유저의 권한을 변경했습니다."),
     ADD_SEMESTER_SUCCESS(HttpStatus.CREATED, true, "학기를 추가했습니다."),
-    DELETE_SEMESTER_SUCCESS(HttpStatus.OK, true, "학기를 삭제했습니다.");
+    DELETE_SEMESTER_SUCCESS(HttpStatus.OK, true, "학기를 삭제했습니다."),
+    ADD_ACTIVITY_SUCCESS(HttpStatus.CREATED, true, "활동을 추가했습니다."),
+    DELETE_ACTIVITY_SUCCESS(HttpStatus.OK, true, "활동을 삭제했습니다.");
+
 
     private final HttpStatus httpStatus;
     private final Boolean success;
