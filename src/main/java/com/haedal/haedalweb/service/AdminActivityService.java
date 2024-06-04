@@ -29,4 +29,16 @@ public class AdminActivityService {
 
         activityRepository.save(activity);
     }
+
+    @Transactional
+    public void deleteActivity(Long semesterId, Long activityId) {
+        Semester semester = semesterRepository.findById(semesterId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
+
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
+
+        // 활동안에 게시판이 존재할 때, 에러 코드 반환하는 로직 작성
+        activityRepository.delete(activity);
+    }
 }
