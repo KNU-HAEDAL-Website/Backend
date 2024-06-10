@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
 
@@ -64,7 +65,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private LoginDTO parseLoginRequest(HttpServletRequest request) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             ServletInputStream inputStream = request.getInputStream();
             String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
 

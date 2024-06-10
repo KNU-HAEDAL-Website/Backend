@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 public class ResponseUtil {
     private static final Logger logger = LoggerFactory.getLogger(ResponseUtil.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void sendSuccessResponse(HttpServletResponse response, SuccessCode successCode) {
         response.setStatus(successCode.getHttpStatus().value());
@@ -33,7 +34,7 @@ public class ResponseUtil {
 
     public static void writeAsJsonResponse(HttpServletResponse response, Object data) {
         try {
-            String jsonData = new ObjectMapper().writeValueAsString(data);
+            String jsonData = objectMapper.writeValueAsString(data);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(jsonData);
