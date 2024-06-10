@@ -7,6 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 public class CookieUtil {
+
+    private CookieUtil() {
+    }
+
     public static Cookie createCookie(String key, String value, int maxAge) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(maxAge);

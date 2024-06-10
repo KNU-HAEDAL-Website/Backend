@@ -12,6 +12,8 @@ public class ResponseUtil {
     private static final Logger logger = LoggerFactory.getLogger(ResponseUtil.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private ResponseUtil() {}
+
     public static void sendSuccessResponse(HttpServletResponse response, SuccessCode successCode) {
         response.setStatus(successCode.getHttpStatus().value());
 
