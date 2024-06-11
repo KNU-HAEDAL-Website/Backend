@@ -25,7 +25,7 @@ public class Activity {
     @Id
     @Column(name = "activity_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "activity_name")
     @NonNull
