@@ -2,7 +2,7 @@ package com.haedal.haedalweb.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Semester;
-import com.haedal.haedalweb.dto.request.SemesterCreationDTO;
+import com.haedal.haedalweb.dto.request.CreateSemesterDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
@@ -17,10 +17,10 @@ public class AdminSemesterService {
     private final ActivityRepository activityRepository;
 
     @Transactional
-    public void createSemester(SemesterCreationDTO semesterCreationDTO) {
-        validateAddSemesterRequest(semesterCreationDTO);
+    public void createSemester(CreateSemesterDTO createSemesterDTO) {
+        validateAddSemesterRequest(createSemesterDTO);
 
-        String semesterName = semesterCreationDTO.getSemesterName();
+        String semesterName = createSemesterDTO.getSemesterName();
         Semester semester = Semester.builder()
                 .name(semesterName)
                 .build();
@@ -39,8 +39,8 @@ public class AdminSemesterService {
         semesterRepository.delete(semester);
     }
 
-    private void validateAddSemesterRequest(SemesterCreationDTO semesterCreationDTO) {
-        if (isSemesterDuplicate(semesterCreationDTO.getSemesterName())) {
+    private void validateAddSemesterRequest(CreateSemesterDTO createSemesterDTO) {
+        if (isSemesterDuplicate(createSemesterDTO.getSemesterName())) {
             throw new BusinessException(ErrorCode.DUPLICATED_SEMESTER);
         }
     }

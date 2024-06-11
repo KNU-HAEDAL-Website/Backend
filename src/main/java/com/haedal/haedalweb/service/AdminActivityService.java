@@ -3,7 +3,7 @@ package com.haedal.haedalweb.service;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
 import com.haedal.haedalweb.domain.Semester;
-import com.haedal.haedalweb.dto.request.ActivityCreationDTO;
+import com.haedal.haedalweb.dto.request.CreateActivityDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
@@ -18,12 +18,12 @@ public class AdminActivityService {
     private final ActivityRepository activityRepository;
 
     @Transactional
-    public void createActivity(Long semesterId, ActivityCreationDTO activityCreationDTO) {
+    public void createActivity(Long semesterId, CreateActivityDTO createActivityDTO) {
         Semester semester = semesterRepository.findById(semesterId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
 
         Activity activity = Activity.builder()
-                .name(activityCreationDTO.getActivityName())
+                .name(createActivityDTO.getActivityName())
                 .semester(semester)
                 .build();
 
