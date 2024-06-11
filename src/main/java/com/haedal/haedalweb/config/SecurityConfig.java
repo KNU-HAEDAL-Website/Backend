@@ -74,6 +74,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/admin/**").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers("/boards/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers("/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semester/**").permitAll()
                         .anyRequest().authenticated());
 
