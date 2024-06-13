@@ -2,7 +2,7 @@ package com.haedal.haedalweb.controller.admin;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.request.SemesterCreationDTO;
+import com.haedal.haedalweb.dto.request.CreateSemesterDTO;
 import com.haedal.haedalweb.dto.response.SuccessResponse;
 import com.haedal.haedalweb.service.AdminSemesterService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
@@ -33,8 +33,8 @@ public class AdminSemesterController {
     @ApiSuccessCodeExample(SuccessCode.ADD_SEMESTER_SUCCESS)
     @ApiErrorCodeExample(ErrorCode.DUPLICATED_SEMESTER)
     @PostMapping
-    public ResponseEntity<SuccessResponse> addSemester(@RequestBody @Valid SemesterCreationDTO semesterCreationDTO) {
-        adminSemesterService.createSemester(semesterCreationDTO);
+    public ResponseEntity<SuccessResponse> addSemester(@RequestBody @Valid CreateSemesterDTO createSemesterDTO) {
+        adminSemesterService.createSemester(createSemesterDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_SEMESTER_SUCCESS);
     }

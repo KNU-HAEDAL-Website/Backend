@@ -5,7 +5,7 @@ import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.response.ActiveUserDTO;
 import com.haedal.haedalweb.dto.response.InActiveUserDTO;
-import com.haedal.haedalweb.dto.request.RoleUpdateDTO;
+import com.haedal.haedalweb.dto.request.UpdateRoleDTO;
 import com.haedal.haedalweb.dto.response.SuccessResponse;
 import com.haedal.haedalweb.service.AdminUserService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
@@ -88,8 +88,8 @@ public class AdminUserController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ROLE})
     @Parameter(name = "userId", description = "권한 변경할 유저 ID")
     @PatchMapping("/{userId}/role")
-    public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody RoleUpdateDTO roleUpdateDTO) {
-        adminUserService.updateUserRole(userId, roleUpdateDTO.getRole());
+    public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody UpdateRoleDTO updateRoleDTO) {
+        adminUserService.updateUserRole(userId, updateRoleDTO.getRole());
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_ROLE);
     }

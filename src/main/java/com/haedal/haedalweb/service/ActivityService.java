@@ -2,7 +2,6 @@ package com.haedal.haedalweb.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
-import com.haedal.haedalweb.domain.Semester;
 import com.haedal.haedalweb.dto.response.ActivityDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
-    public List<ActivityDTO> getActivities(Long semesterId) {
+    public List<ActivityDTO> getActivityDTOs(Long semesterId) {
         List<Activity> activities = activityRepository.findBySemesterId(semesterId);
 
         return activities.stream()
@@ -33,4 +32,8 @@ public class ActivityService {
                 .build();
     }
 
+    public Activity findActivityById(Long activityId) {
+        return activityRepository.findById(activityId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
+    }
 }

@@ -21,7 +21,7 @@ public class SemesterController {
     @Operation(summary = "학기 전체 조회")
     @GetMapping
     public ResponseEntity<List<SemesterDTO>> getAllSemester() {
-        List<SemesterDTO> semesterDTOs = semesterService.getAllSemester();
+        List<SemesterDTO> semesterDTOs = semesterService.getAllSemesterDTOs();
 
         return ResponseEntity.ok(semesterDTOs);
     }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoleUpdateDTO {
+public class UpdateRoleDTO {
     @Schema(description = "유저 권한", example = "(해구르르, 팀장, 일반)")
     private String role;
 
