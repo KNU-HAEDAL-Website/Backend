@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.service;
 
+import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
 import io.awspring.cloud.s3.S3Operations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,14 @@ public class S3Service {
 
     public URL generatePreSignedUrl(String objectKey) {
         return s3Operations.createSignedPutURL(bucketName, objectKey, Duration.ofMinutes(10), null, "image/jpeg");
+    }
+
+    public PreSignedUrlDTO getPreSignedUrlDTO(String objectKey) {
+        URL url = generatePreSignedUrl(objectKey);
+
+        return PreSignedUrlDTO.builder()
+                .preSignedUrl(url)
+                .imageUrl(objectKey)
+                .build();
     }
 }
