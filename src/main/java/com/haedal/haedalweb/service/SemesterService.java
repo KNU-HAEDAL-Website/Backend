@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class SemesterService {
     private final SemesterRepository semesterRepository;
 
-    public List<SemesterDTO> getAllSemester() {
+    public List<SemesterDTO> getAllSemesterDTOs() {
         List<Semester> semesters = semesterRepository.findAll(Sort.by("name"));
 
         return semesters.stream()

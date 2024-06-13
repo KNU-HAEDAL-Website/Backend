@@ -2,7 +2,7 @@ package com.haedal.haedalweb.controller.admin;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.request.ActivityCreationDTO;
+import com.haedal.haedalweb.dto.request.CreateActivityDTO;
 import com.haedal.haedalweb.dto.response.SuccessResponse;
 import com.haedal.haedalweb.service.AdminActivityService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
@@ -31,8 +31,8 @@ public class AdminActivityController {
     @ApiSuccessCodeExample(SuccessCode.ADD_ACTIVITY_SUCCESS)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_SEMESTER_ID)
     @PostMapping
-    public ResponseEntity<SuccessResponse> addActivity(@PathVariable Long semesterId, @RequestBody @Valid ActivityCreationDTO activityCreationDTO) {
-        adminActivityService.createActivity(semesterId, activityCreationDTO);
+    public ResponseEntity<SuccessResponse> addActivity(@PathVariable Long semesterId, @RequestBody @Valid CreateActivityDTO createActivityDTO) {
+        adminActivityService.createActivity(semesterId, createActivityDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_ACTIVITY_SUCCESS);
     }

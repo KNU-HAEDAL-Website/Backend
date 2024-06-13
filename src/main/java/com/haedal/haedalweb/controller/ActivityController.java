@@ -21,7 +21,7 @@ public class ActivityController {
     @Operation(summary = "해당 학기 활동 조회")
     @GetMapping("/semesters/{semesterId}/activities")
     public ResponseEntity<List<ActivityDTO>> getActivities(@PathVariable Long semesterId) {
-        List<ActivityDTO> activityDTOs = activityService.getActivities(semesterId);
+        List<ActivityDTO> activityDTOs = activityService.getActivityDTOs(semesterId);
 
         return ResponseEntity.ok(activityDTOs);
     }
