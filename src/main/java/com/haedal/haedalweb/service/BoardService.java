@@ -67,4 +67,8 @@ public class BoardService {
             }
         });
     }
+
+    public boolean isActivityPresent(Long activityId) {
+        return boardRepository.existsByActivityId(activityId);
+    }
 }
