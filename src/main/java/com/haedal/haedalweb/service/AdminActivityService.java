@@ -2,10 +2,12 @@ package com.haedal.haedalweb.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
+import com.haedal.haedalweb.domain.Board;
 import com.haedal.haedalweb.domain.Semester;
 import com.haedal.haedalweb.dto.request.CreateActivityDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
+import com.haedal.haedalweb.repository.BoardRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminActivityService {
     private final SemesterRepository semesterRepository;
     private final ActivityRepository activityRepository;
+    private final BoardService boardService;
 
     @Transactional
     public void createActivity(Long semesterId, CreateActivityDTO createActivityDTO) {
@@ -31,14 +34,17 @@ public class AdminActivityService {
     }
 
     @Transactional
-    public void deleteActivity(Long semesterId, Long activityId) {
-        Semester semester = semesterRepository.findById(semesterId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
-
+    public void deleteActivity(Long activityId) {
         Activity activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
 
-        // 활동안에 게시판이 존재할 때, 에러 코드 반환하는 로직 작성
+        validateDeleteActivityRequest(activityId);
         activityRepository.delete(activity);
+    }
+
+    private void validateDeleteActivityRequest(Long activityId) {
+        if (boardService.isActivityPresent(activityId)) {
+            throw new BusinessException(ErrorCode.EXIST_BOARD);
+        }
     }
 }

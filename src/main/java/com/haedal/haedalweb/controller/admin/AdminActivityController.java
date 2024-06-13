@@ -6,6 +6,7 @@ import com.haedal.haedalweb.dto.request.CreateActivityDTO;
 import com.haedal.haedalweb.dto.response.SuccessResponse;
 import com.haedal.haedalweb.service.AdminActivityService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
+import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,10 +40,10 @@ public class AdminActivityController {
 
     @Operation(summary = "활동 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_ACTIVITY_SUCCESS)
-    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_SEMESTER_ID)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.EXIST_BOARD})
     @DeleteMapping("/{activityId}")
     public ResponseEntity<SuccessResponse> deleteActivity(@PathVariable Long semesterId, @PathVariable Long activityId) {
-        adminActivityService.deleteActivity(semesterId, activityId);
+        adminActivityService.deleteActivity(activityId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_ACTIVITY_SUCCESS);
     }

@@ -22,7 +22,8 @@ public enum ErrorCode implements ResponseCode{
     DUPLICATED_SEMESTER(HttpStatus.CONFLICT, "013", "이미 해당 학기가 존재합니다."),
     NOT_FOUND_SEMESTER_ID(HttpStatus.NOT_FOUND, "014", "해당 학기를 찾을 수 없습니다."),
     NOT_FOUND_ACTIVITY_ID(HttpStatus.NOT_FOUND, "015", "해당 활동을 찾을 수 없습니다."),
-    EXIST_ACTIVITY(HttpStatus.CONFLICT, "016", "해당 학기에 활동이 존재하는 경우 삭제할 수 없습니다.");
+    EXIST_ACTIVITY(HttpStatus.CONFLICT, "016", "해당 학기에 활동이 존재하는 경우 삭제할 수 없습니다."),
+    EXIST_BOARD(HttpStatus.CONFLICT, "017", "해당 활동에 게시판이 존재하는 경우 삭제할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
