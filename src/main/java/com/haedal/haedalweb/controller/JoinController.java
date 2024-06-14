@@ -3,7 +3,7 @@ package com.haedal.haedalweb.controller;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.request.JoinDTO;
-import com.haedal.haedalweb.dto.response.SuccessResponse;
+import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExamples;

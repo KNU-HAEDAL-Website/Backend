@@ -1,7 +1,7 @@
 package com.haedal.haedalweb.exception;
 
 import com.haedal.haedalweb.constants.ErrorCode;
-import com.haedal.haedalweb.dto.response.ErrorResponse;
+import com.haedal.haedalweb.dto.response.common.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

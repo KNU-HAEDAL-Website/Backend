@@ -6,7 +6,7 @@ import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.response.ActiveUserDTO;
 import com.haedal.haedalweb.dto.response.InActiveUserDTO;
 import com.haedal.haedalweb.dto.request.UpdateRoleDTO;
-import com.haedal.haedalweb.dto.response.SuccessResponse;
+import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.AdminUserService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;

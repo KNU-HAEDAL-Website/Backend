@@ -3,7 +3,7 @@ package com.haedal.haedalweb.controller.admin;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.request.CreateSemesterDTO;
-import com.haedal.haedalweb.dto.response.SuccessResponse;
+import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.AdminSemesterService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
