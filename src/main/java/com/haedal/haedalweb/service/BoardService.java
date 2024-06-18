@@ -7,14 +7,19 @@ import com.haedal.haedalweb.domain.Participant;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.request.CreateBoardDTO;
+import com.haedal.haedalweb.dto.response.BoardDTO;
+import com.haedal.haedalweb.dto.response.ParticipantDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +27,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final ActivityService activityService;
     private final UserService userService;
+
+    public boolean isActivityPresent(Long activityId) {
+        return boardRepository.existsByActivityId(activityId);
+    }
 
     @Transactional
     public void createBoard(Long activityId, CreateBoardDTO createBoardDTO) {
@@ -43,6 +52,13 @@ public class BoardService {
 
         addParticipantsToBoard(board, participants);
         boardRepository.save(board);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BoardDTO> getBoardDTOs(Long activityId, Pageable pageable) {
+        Page<Board> boardPage = boardRepository.findBoardsByActivityId(activityId, pageable);
+
+        return boardPage.map(this::convertToBoardDTO);
     }
 
     private void addParticipantsToBoard(Board board, List<User> participants) {
@@ -68,7 +84,27 @@ public class BoardService {
         });
     }
 
-    public boolean isActivityPresent(Long activityId) {
-        return boardRepository.existsByActivityId(activityId);
+    private BoardDTO convertToBoardDTO(Board board) {
+        return BoardDTO.builder()
+                .boardId(board.getId())
+                .boardName(board.getName())
+                .boardIntro(board.getIntro())
+                .boardImageUrl(null) // presigned-url 변환 후 값 넣어주기
+                .participants(convertParticipants(board.getParticipants())) // List<Participants>로 List<participantDTO> 만들기
+                .build();
+    }
+
+    private List<ParticipantDTO> convertParticipants(List<Participant> participants) {
+        return participants.stream()
+                .map(this::convertToParticipantDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ParticipantDTO convertToParticipantDTO(Participant participant) {
+        return ParticipantDTO.builder()
+                .participantId(participant.getId())
+                .userId(participant.getUser().getId())
+                .userName(participant.getUser().getName())
+                .build();
     }
 }
