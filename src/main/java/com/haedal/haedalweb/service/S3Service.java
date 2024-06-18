@@ -18,16 +18,17 @@ public class S3Service {
         this.bucketName = bucketName;
     }
 
-    public URL generatePreSignedUrl(String objectKey) {
+    public URL generatePreSignedPutUrl(String objectKey) {
         return s3Operations.createSignedPutURL(bucketName, objectKey, Duration.ofMinutes(10), null, "image/jpeg");
     }
 
     public PreSignedUrlDTO getPreSignedUrlDTO(String objectKey) {
-        URL url = generatePreSignedUrl(objectKey);
+        URL url = generatePreSignedPutUrl(objectKey);
 
         return PreSignedUrlDTO.builder()
                 .preSignedUrl(url)
                 .imageUrl(objectKey)
                 .build();
     }
+
 }
