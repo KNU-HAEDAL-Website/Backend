@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +26,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final ActivityService activityService;
     private final UserService userService;
+    private final S3Service s3Service;
 
     public boolean isActivityPresent(Long activityId) {
         return boardRepository.existsByActivityId(activityId);
@@ -36,7 +36,7 @@ public class BoardService {
     public void createBoard(Long activityId, CreateBoardDTO createBoardDTO) {
         Activity activity = activityService.findActivityById(activityId);
         User creator = userService.getLoggedInUser();
-        List<String> participantIds = createBoardDTO.getParticipants();
+        List<String> participantIds = new ArrayList<>(createBoardDTO.getParticipants());
         List<User> participants = userService.findUserByIds(participantIds);
 
         validateParticipants(participants, participantIds);
@@ -89,7 +89,7 @@ public class BoardService {
                 .boardId(board.getId())
                 .boardName(board.getName())
                 .boardIntro(board.getIntro())
-                .boardImageUrl(null) // presigned-url 변환 후 값 넣어주기
+                .boardImageUrl(s3Service.generatePreSignedGetUrl(board.getImageUrl())) // presigned-url 변환 후 값 넣어주기
                 .participants(convertParticipants(board.getParticipants())) // List<Participants>로 List<participantDTO> 만들기
                 .build();
     }
