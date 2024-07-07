@@ -13,21 +13,25 @@ public class S3Service {
     private final S3Operations s3Operations;
     private final String bucketName;
 
-    public S3Service(S3Operations s3Operations, @Value("spring.cloud.aws.s3.bucket") String bucketName) {
+    public S3Service(S3Operations s3Operations, @Value("${spring.cloud.aws.s3.bucket}") String bucketName) {
         this.s3Operations = s3Operations;
         this.bucketName = bucketName;
     }
 
-    public URL generatePreSignedUrl(String objectKey) {
-        return s3Operations.createSignedPutURL(bucketName, objectKey, Duration.ofMinutes(10), null, "image/jpeg");
-    }
-
     public PreSignedUrlDTO getPreSignedUrlDTO(String objectKey) {
-        URL url = generatePreSignedUrl(objectKey);
+        URL url = generatePreSignedPutUrl(objectKey);
 
         return PreSignedUrlDTO.builder()
                 .preSignedUrl(url)
                 .imageUrl(objectKey)
                 .build();
+    }
+
+    public URL generatePreSignedGetUrl(String objectKey) {
+        return s3Operations.createSignedGetURL(bucketName, objectKey, Duration.ofMinutes(10));
+    }
+
+    private URL generatePreSignedPutUrl(String objectKey) {
+        return s3Operations.createSignedPutURL(bucketName, objectKey, Duration.ofMinutes(10), null, "image/jpeg");
     }
 }

@@ -3,8 +3,9 @@ package com.haedal.haedalweb.controller;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.request.CreateBoardDTO;
+import com.haedal.haedalweb.dto.response.BoardDTO;
 import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
-import com.haedal.haedalweb.dto.response.SuccessResponse;
+import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.BoardService;
 import com.haedal.haedalweb.service.S3Service;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
@@ -12,14 +13,19 @@ import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
@@ -48,5 +54,20 @@ public class BoardController {
         boardService.createBoard(activityId, createBoardDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
+    }
+
+    @Operation(summary = "게시판 페이징 조회")
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
+            @Parameter(name = "page", description = "조회 할 page, default: 0"),
+            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 5")
+    })
+    @GetMapping("/activities/{activityId}/boards")
+    public ResponseEntity<Page<BoardDTO>> getBoards(@PathVariable Long activityId,
+                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                    @RequestParam(name = "size", defaultValue = "5") Integer size) {
+        Page<BoardDTO> boardDTOs = boardService.getBoardDTOs(activityId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
+
+        return ResponseEntity.ok(boardDTOs);
     }
 }

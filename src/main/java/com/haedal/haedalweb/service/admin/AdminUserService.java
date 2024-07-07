@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.service;
+package com.haedal.haedalweb.service.admin;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Role;

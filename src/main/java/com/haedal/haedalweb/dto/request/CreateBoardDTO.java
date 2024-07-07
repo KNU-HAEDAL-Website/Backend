@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,5 +24,5 @@ public class CreateBoardDTO {
     private String boardImageUrl;
 
     @Schema(description = "참여 인원 ID", allowableValues = {"haedal1234", "good1234"})
-    private List<String> participants;
+    private Set<String> participants;
 }

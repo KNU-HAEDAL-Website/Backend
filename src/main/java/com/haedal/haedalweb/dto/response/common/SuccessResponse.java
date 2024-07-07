@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.dto.response;
+package com.haedal.haedalweb.dto.response.common;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -9,6 +9,7 @@ import com.haedal.haedalweb.jwt.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -74,8 +75,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/admin/**").hasAnyRole("WEB_MASTER", "ADMIN")
-                        .requestMatchers("/boards/generate-presigned-url", "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers("/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
+                        .requestMatchers("/boards/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+                        .requestMatchers(HttpMethod.POST, "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+                        .requestMatchers("/activities/{activityId}/boards", "/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록

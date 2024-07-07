@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.service;
+package com.haedal.haedalweb.service.admin;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
@@ -9,6 +9,7 @@ import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.BoardRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
+import com.haedal.haedalweb.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

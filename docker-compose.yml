@@ -17,6 +17,8 @@ services:
       SPRING_JWT_SECRET_KEY: ${SPRING_JWT_SECRET_KEY}
       AWS_IAM_ACCESS_KEY: ${AWS_IAM_ACCESS_KEY}
       AWS_IAM_SECRET_KEY: ${AWS_IAM_SECRET_KEY}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
+      TZ: "Asia/Seoul"
   haedal-mysql:
     image: mysql:8.0.36
     volumes:
@@ -26,7 +28,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      TZ: Asia/Seoul
+      TZ: "Asia/Seoul"
     ports:
       - "3306:3306"
   haedal-redis:
@@ -34,6 +36,7 @@ services:
     command: redis-server --requirepass ${SPRING_DATA_REDIS_PASSWORD} --port 6379
     ports:
       - "6379:6379"
-
+    environment:
+      TZ: "Asia/Seoul"
 volumes:
   db-data:
