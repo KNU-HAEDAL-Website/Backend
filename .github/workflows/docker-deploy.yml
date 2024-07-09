@@ -45,6 +45,6 @@ jobs:
           username: ubuntu
           script: |
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/haedal-web
+            sudo docker pull ${{ DOCKER_USERNAME }}/haedal-web
             sudo -E docker-compose up -d
             docker image prune -f
