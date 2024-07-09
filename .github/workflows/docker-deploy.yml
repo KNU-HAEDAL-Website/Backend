@@ -36,3 +36,16 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/haedal-web
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ec2-user
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/haedal-web
+            docker-compose up -d
+            docker image prune -f
