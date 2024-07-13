@@ -4,6 +4,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
 import com.haedal.haedalweb.domain.Board;
 import com.haedal.haedalweb.domain.Participant;
+import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.request.CreateBoardDTO;
@@ -70,6 +71,21 @@ public class BoardService {
         return convertToBoardDTO(board, activityId);
     }
 
+    @Transactional
+    public void deleteBoard(Long activityId, Long boardId) {
+        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+
+        User loggedInUser = userService.getLoggedInUser();
+        User creator = board.getUser();
+
+        validateAuthorityOfBoardDelete(loggedInUser, creator);
+
+        // 게시글 존재 시 삭제 불가 로직 추가 예정
+        s3Service.deleteObject(board.getImageUrl());
+        boardRepository.delete(board);
+    }
+
     private void addParticipantsToBoard(Board board, List<User> participants) {
         for (User user : participants) {
             Participant participant = Participant.builder()
@@ -116,5 +132,11 @@ public class BoardService {
                 .userId(participant.getUser().getId())
                 .userName(participant.getUser().getName())
                 .build();
+    }
+
+    private void validateAuthorityOfBoardDelete(User loggedInUser, User creator) {
+        if (loggedInUser.getRole() == Role.ROLE_TEAM_LEADER && !loggedInUser.getId().equals(creator.getId())) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_DELETE);
+        }
     }
 }

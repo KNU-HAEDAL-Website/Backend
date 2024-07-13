@@ -27,6 +27,10 @@ public class S3Service {
                 .build();
     }
 
+    public void deleteObject(String key) {
+        s3Operations.deleteObject(bucketName, key);
+    }
+
     public URL generatePreSignedGetUrl(String objectKey) {
         return s3Operations.createSignedGetURL(bucketName, objectKey, Duration.ofMinutes(10));
     }
