@@ -56,7 +56,8 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public Page<BoardDTO> getBoardDTOs(Long activityId, Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findBoardsByActivityId(activityId, pageable);
+        Activity activity = activityService.findActivityById(activityId);
+        Page<Board> boardPage = boardRepository.findBoardsByActivity(activity, pageable);
 
         return boardPage.map(board -> convertToBoardDTO(board, activityId));
     }
