@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,7 @@ public class BoardController {
     }
 
     @Operation(summary = "게시판 페이징 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
             @Parameter(name = "page", description = "조회 할 page, default: 0"),
@@ -72,6 +74,7 @@ public class BoardController {
     }
 
     @Operation(summary = "게시판 단일 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
             @Parameter(name = "boardId", description = "해당 게시판 ID")
@@ -81,5 +84,19 @@ public class BoardController {
         BoardDTO boardDTO = boardService.getBoardDTO(activityId, boardId);
 
         return ResponseEntity.ok(boardDTO);
+    }
+
+    @Operation(summary = "게시판 삭제")
+    @ApiSuccessCodeExample(SuccessCode.DELETE_BOARD_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_DELETE})
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @DeleteMapping("/activities/{activityId}/boards/{boardId}")
+    public ResponseEntity<SuccessResponse> deleteBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
+        boardService.deleteBoard(activityId, boardId);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_BOARD_SUCCESS);
     }
 }
