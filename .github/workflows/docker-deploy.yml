@@ -45,6 +45,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ubuntu
           script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/haedal-web
             sudo docker rm -f $(docker ps -qa)
             sudo -E docker-compose up -d
             docker image prune -f
