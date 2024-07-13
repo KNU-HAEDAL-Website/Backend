@@ -58,7 +58,15 @@ public class BoardService {
     public Page<BoardDTO> getBoardDTOs(Long activityId, Pageable pageable) {
         Page<Board> boardPage = boardRepository.findBoardsByActivityId(activityId, pageable);
 
-        return boardPage.map(this::convertToBoardDTO);
+        return boardPage.map(board -> convertToBoardDTO(board, activityId));
+    }
+
+    @Transactional(readOnly = true)
+    public BoardDTO getBoardDTO(Long activityId, Long boardId) {
+        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+
+        return convertToBoardDTO(board, activityId);
     }
 
     private void addParticipantsToBoard(Board board, List<User> participants) {
@@ -84,8 +92,9 @@ public class BoardService {
         });
     }
 
-    private BoardDTO convertToBoardDTO(Board board) {
+    private BoardDTO convertToBoardDTO(Board board, Long activityId) {
         return BoardDTO.builder()
+                .activityId(activityId)
                 .boardId(board.getId())
                 .boardName(board.getName())
                 .boardIntro(board.getIntro())
