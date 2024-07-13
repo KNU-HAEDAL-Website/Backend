@@ -77,7 +77,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAnyRole("WEB_MASTER", "ADMIN")
                         .requestMatchers("/boards/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.POST, "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers("/activities/{activityId}/boards", "/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
+                        .requestMatchers("/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록

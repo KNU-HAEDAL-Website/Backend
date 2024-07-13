@@ -70,4 +70,16 @@ public class BoardController {
 
         return ResponseEntity.ok(boardDTOs);
     }
+
+    @Operation(summary = "게시판 단일 조회")
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @GetMapping("/activities/{activityId}/boards/{boardId}")
+    public ResponseEntity<BoardDTO> getBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
+        BoardDTO boardDTO = boardService.getBoardDTO(activityId, boardId);
+
+        return ResponseEntity.ok(boardDTO);
+    }
 }
