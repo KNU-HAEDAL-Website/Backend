@@ -13,6 +13,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardDTO {
+    private Long activityId;
+
     private Long boardId;
 
     private String boardName;
