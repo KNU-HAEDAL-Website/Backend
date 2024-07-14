@@ -14,6 +14,8 @@ import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,5 +101,17 @@ public class BoardController {
         boardService.deleteBoard(activityId, boardId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_BOARD_SUCCESS);
+    }
+
+    @Operation(summary = "게시판 수정")
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @PatchMapping("/activities/{activityId}/boards/{boardId}/image")
+    public ResponseEntity<?> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody String boardImageUrl) {
+        boardService.updateBoardImage(activityId, boardId, boardImageUrl);
+
+        return ResponseEntity.ok().build();
     }
 }
