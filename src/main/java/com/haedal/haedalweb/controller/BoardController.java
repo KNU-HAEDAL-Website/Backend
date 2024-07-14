@@ -3,6 +3,7 @@ package com.haedal.haedalweb.controller;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.request.CreateBoardDTO;
+import com.haedal.haedalweb.dto.request.UpdateBoardDTO;
 import com.haedal.haedalweb.dto.response.BoardDTO;
 import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
@@ -91,7 +92,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_DELETE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
             @Parameter(name = "boardId", description = "해당 게시판 ID")
@@ -103,15 +104,31 @@ public class BoardController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_BOARD_SUCCESS);
     }
 
-    @Operation(summary = "게시판 수정")
+    @Operation(summary = "게시판 이미지 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
             @Parameter(name = "boardId", description = "해당 게시판 ID")
     })
     @PatchMapping("/activities/{activityId}/boards/{boardId}/image")
-    public ResponseEntity<?> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody String boardImageUrl) {
+    public ResponseEntity<SuccessResponse> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody String boardImageUrl) {
         boardService.updateBoardImage(activityId, boardId, boardImageUrl);
 
-        return ResponseEntity.ok().build();
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
+    }
+
+    @Operation(summary = "게시판 메타 데이터 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID})
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 수정할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @PatchMapping("/activities/{activityId}/boards/{boardId}")
+    public ResponseEntity<SuccessResponse> updateBoard(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody @Valid UpdateBoardDTO updateBoardDTO) {
+        boardService.updateBoard(activityId, boardId, updateBoardDTO);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
     }
 }
