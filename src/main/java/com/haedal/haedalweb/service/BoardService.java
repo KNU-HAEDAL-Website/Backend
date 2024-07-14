@@ -8,6 +8,7 @@ import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
 import com.haedal.haedalweb.dto.request.CreateBoardDTO;
+import com.haedal.haedalweb.dto.request.UpdateBoardDTO;
 import com.haedal.haedalweb.dto.response.BoardDTO;
 import com.haedal.haedalweb.dto.response.ParticipantDTO;
 import com.haedal.haedalweb.exception.BusinessException;
@@ -79,11 +80,49 @@ public class BoardService {
         User loggedInUser = userService.getLoggedInUser();
         User creator = board.getUser();
 
-        validateAuthorityOfBoardDelete(loggedInUser, creator);
+        validateAuthorityOfBoardManagement(loggedInUser, creator);
 
         // 게시글 존재 시 삭제 불가 로직 추가 예정
         s3Service.deleteObject(board.getImageUrl());
         boardRepository.delete(board);
+    }
+
+    @Transactional
+    public void updateBoardImage(Long activityId, Long boardId, String newImageUrl) {
+        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+
+        User loggedInUser = userService.getLoggedInUser();
+        User creator = board.getUser();
+
+        validateAuthorityOfBoardManagement(loggedInUser, creator);
+
+        s3Service.deleteObject(board.getImageUrl());
+        board.setImageUrl(newImageUrl);
+        boardRepository.save(board);
+    }
+
+    @Transactional
+    public void updateBoard(Long activityId, Long boardId, UpdateBoardDTO updateBoardDTO) {
+        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+
+        User loggedInUser = userService.getLoggedInUser();
+        User creator = board.getUser();
+
+        validateAuthorityOfBoardManagement(loggedInUser, creator);
+
+        List<String> participantIds = new ArrayList<>(updateBoardDTO.getParticipants());
+        List<User> participants = userService.findUserByIds(participantIds);
+
+        validateParticipants(participants, participantIds);
+
+        board.setName(updateBoardDTO.getBoardName());
+        board.setIntro(updateBoardDTO.getBoardIntro());
+        board.setParticipants(new ArrayList<>());
+        addParticipantsToBoard(board, participants);
+
+        boardRepository.save(board);
     }
 
     private void addParticipantsToBoard(Board board, List<User> participants) {
@@ -134,9 +173,9 @@ public class BoardService {
                 .build();
     }
 
-    private void validateAuthorityOfBoardDelete(User loggedInUser, User creator) {
+    private void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {
         if (loggedInUser.getRole() == Role.ROLE_TEAM_LEADER && !loggedInUser.getId().equals(creator.getId())) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_DELETE);
+            throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
         }
     }
 }
