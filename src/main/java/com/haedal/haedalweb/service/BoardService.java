@@ -34,6 +34,11 @@ public class BoardService {
         return boardRepository.existsByActivityId(activityId);
     }
 
+    public Board findBoardById(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+    }
+
     @Transactional
     public void createBoard(Long activityId, CreateBoardDTO createBoardDTO) {
         Activity activity = activityService.findActivityById(activityId);
