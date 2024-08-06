@@ -25,7 +25,8 @@ public enum SuccessCode implements ResponseCode{
     DELETE_ACTIVITY_SUCCESS(HttpStatus.OK, true, "활동을 삭제했습니다."),
     ADD_BOARD_SUCCESS(HttpStatus.CREATED, true, "게시판을 생성했습니다."),
     DELETE_BOARD_SUCCESS(HttpStatus.OK, true, "게시판을 삭제했습니다."),
-    UPDATE_BOARD_SUCCESS(HttpStatus.OK, true, "게시판을 수정했습니다.");
+    UPDATE_BOARD_SUCCESS(HttpStatus.OK, true, "게시판을 수정했습니다."),
+    ADD_POST_SUCCESS(HttpStatus.CREATED, true, "게시글을 생성했습니다.");
 
 
     private final HttpStatus httpStatus;
