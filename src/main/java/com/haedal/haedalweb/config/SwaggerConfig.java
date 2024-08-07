@@ -173,9 +173,9 @@ public class SwaggerConfig {
     private void addExamplesToResponses(ApiResponses responses,
                                         Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
 
-        if (responses != null && responses.containsKey("200")) {
-            responses.remove("200");
-        }
+//        if (responses != null && responses.containsKey("200")) {
+//            responses.remove("200");
+//        }
 
         statusWithExampleHolders.forEach(
                 (status, v) -> {
@@ -205,9 +205,9 @@ public class SwaggerConfig {
         content.addMediaType("application/json", mediaType);
         apiResponse.content(content);
 
-        if (responses != null && responses.containsKey("200")) {
-            responses.remove("200");
-        }
+//        if (responses != null && responses.containsKey("200")) {
+//            responses.remove("200");
+//        }
 
         responses.addApiResponse(String.valueOf(exampleHolder.getHttpStatus()), apiResponse);
     }
