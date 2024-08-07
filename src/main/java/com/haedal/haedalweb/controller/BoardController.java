@@ -62,6 +62,7 @@ public class BoardController {
     }
 
     @Operation(summary = "게시판 페이징 조회")
+    @ApiSuccessCodeExample(SuccessCode.OK)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
@@ -78,6 +79,7 @@ public class BoardController {
     }
 
     @Operation(summary = "게시판 단일 조회")
+    @ApiSuccessCodeExample(SuccessCode.OK)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID})
     @Parameters({
             @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
