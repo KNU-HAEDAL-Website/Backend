@@ -22,6 +22,10 @@ public class PostService {
     private final BoardService boardService;
     private final UserService userService;
 
+    public boolean isBoardPresent(Long boardId) {
+        return postRepository.existsByBoardId(boardId);
+    }
+
     @Transactional
     public void createPost(Long boardId, CreatePostDTO createPostDTO) { // createPost 리팩토링 해야함.
         Board board = boardService.findBoardById(boardId);

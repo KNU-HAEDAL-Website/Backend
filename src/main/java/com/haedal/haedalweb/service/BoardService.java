@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final ActivityService activityService;
+    private final PostService postService;
     private final UserService userService;
     private final S3Service s3Service;
 
@@ -86,8 +87,8 @@ public class BoardService {
         User creator = board.getUser();
 
         validateAuthorityOfBoardManagement(loggedInUser, creator);
+        validateDeleteBoardRequest(boardId);
 
-        // 게시글 존재 시 삭제 불가 로직 추가 예정
         s3Service.deleteObject(board.getImageUrl());
         boardRepository.delete(board);
     }
@@ -181,6 +182,12 @@ public class BoardService {
     private void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {
         if (loggedInUser.getRole() == Role.ROLE_TEAM_LEADER && !loggedInUser.getId().equals(creator.getId())) {
             throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
+        }
+    }
+
+    private void validateDeleteBoardRequest(Long boardId) {
+        if (postService.isBoardPresent(boardId)) {
+            throw new BusinessException(ErrorCode.EXIST_POST);
         }
     }
 }
