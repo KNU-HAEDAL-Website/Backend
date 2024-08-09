@@ -7,15 +7,18 @@ import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.PostService;
 import com.haedal.haedalweb.service.S3Service;
+import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +68,19 @@ public class PostController {
     public ResponseEntity<SuccessResponse> addEventPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
         postService.createPost(createPostDTO);
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
+    }
+
+    @Operation(summary = "활동 게시글 삭제")
+    @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
+    @ApiErrorCodeExamples({})
+    @Parameters({
+            @Parameter(name = "boardId", description = "게시글 삭제할 활동 게시판 ID"),
+            @Parameter(name = "postId", description = "해당 게시글 ID")
+    })
+    @DeleteMapping("/boards/{boardId}/posts/{postId}")
+    public ResponseEntity<SuccessResponse> deletePost(@PathVariable Long boardId, @PathVariable Long postId) {
+        postService.deletePost(boardId, postId);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
 }
