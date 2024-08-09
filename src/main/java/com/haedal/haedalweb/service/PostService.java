@@ -7,6 +7,7 @@ import com.haedal.haedalweb.domain.PostType;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.request.CreatePostDTO;
 import com.haedal.haedalweb.exception.BusinessException;
+import com.haedal.haedalweb.repository.BoardRepository;
 import com.haedal.haedalweb.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final BoardService boardService;
+    private final BoardRepository boardRepository;
     private final UserService userService;
 
     public boolean isBoardPresent(Long boardId) {
@@ -28,7 +29,9 @@ public class PostService {
 
     @Transactional
     public void createPost(Long boardId, CreatePostDTO createPostDTO) { // createPost 리팩토링 해야함.
-        Board board = boardService.findBoardById(boardId);
+        // Board board = boardService.findBoardById(boardId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
         PostType postType;
 
         try {
@@ -85,5 +88,21 @@ public class PostService {
                 .build();
 
         postRepository.save(post);
+    }
+
+    @Transactional
+    public void deletePost(Long boardId, Long postId) { // 활동 게시글 삭제 method
+        Post post = postRepository.findByBoardIdAndId(boardId, postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+        //Board board = boardService.findBoardById(boardId);
+
+        User loggedInUser = userService.getLoggedInUser();
+        User postCreator = post.getUser();
+       // User boardCreator = board.getUser();
+
+        //validateAuthorityOfPostManagement
+
+        // 게시판 생성한 것은 팀장이므로, 게시판 생성자와 WEB_MASTER, 해구르르, 게시글 작성자만 삭제 가능
+
     }
 }
