@@ -2,14 +2,12 @@ package com.haedal.haedalweb.service.admin;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Activity;
-import com.haedal.haedalweb.domain.Board;
 import com.haedal.haedalweb.domain.Semester;
 import com.haedal.haedalweb.dto.request.CreateActivityDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.BoardRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
-import com.haedal.haedalweb.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminActivityService {
     private final SemesterRepository semesterRepository;
     private final ActivityRepository activityRepository;
-    private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     @Transactional
     public void createActivity(Long semesterId, CreateActivityDTO createActivityDTO) {
@@ -44,7 +42,7 @@ public class AdminActivityService {
     }
 
     private void validateDeleteActivityRequest(Long activityId) {
-        if (boardService.isActivityPresent(activityId)) {
+        if (boardRepository.existsByActivityId(activityId)) {
             throw new BusinessException(ErrorCode.EXIST_BOARD);
         }
     }

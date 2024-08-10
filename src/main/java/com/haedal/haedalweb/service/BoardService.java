@@ -12,7 +12,9 @@ import com.haedal.haedalweb.dto.request.UpdateBoardDTO;
 import com.haedal.haedalweb.dto.response.BoardDTO;
 import com.haedal.haedalweb.dto.response.ParticipantDTO;
 import com.haedal.haedalweb.exception.BusinessException;
+import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.BoardRepository;
+import com.haedal.haedalweb.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,24 +27,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class BoardService {
-    private final BoardRepository boardRepository;
-    private final ActivityService activityService;
-    private final PostService postService;
     private final UserService userService;
+    private final BoardRepository boardRepository;
+    private final ActivityRepository activityRepository;
+    private final PostRepository postRepository;
     private final S3Service s3Service;
-
-    public boolean isActivityPresent(Long activityId) {
-        return boardRepository.existsByActivityId(activityId);
-    }
-
-    public Board findBoardById(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-    }
 
     @Transactional
     public void createBoard(Long activityId, CreateBoardDTO createBoardDTO) {
-        Activity activity = activityService.findActivityById(activityId);
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
         User creator = userService.getLoggedInUser();
         List<String> participantIds = new ArrayList<>(createBoardDTO.getParticipants());
         List<User> participants = userService.findUserByIds(participantIds);
@@ -64,7 +58,8 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public Page<BoardDTO> getBoardDTOs(Long activityId, Pageable pageable) {
-        Activity activity = activityService.findActivityById(activityId);
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
         Page<Board> boardPage = boardRepository.findBoardsByActivity(activity, pageable);
 
         return boardPage.map(board -> convertToBoardDTO(board, activityId));
@@ -186,7 +181,7 @@ public class BoardService {
     }
 
     private void validateDeleteBoardRequest(Long boardId) {
-        if (postService.isBoardPresent(boardId)) {
+        if (postRepository.existsByBoardId(boardId)) {
             throw new BusinessException(ErrorCode.EXIST_POST);
         }
     }
