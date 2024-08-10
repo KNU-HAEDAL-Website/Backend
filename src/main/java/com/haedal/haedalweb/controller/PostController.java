@@ -83,4 +83,18 @@ public class PostController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
+
+    @Operation(summary = "공지사항 게시글 삭제")
+    @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_TYPE})
+    @Parameters({
+            @Parameter(name = "postId", description = "해당 게시글 ID")
+    })
+    @DeleteMapping("/notice/posts/{postId}")
+    public ResponseEntity<SuccessResponse> deleteNoticePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
+    }
+
 }

@@ -104,6 +104,22 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    @Transactional
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+
+        try {
+            if (post.getPostType() != PostType.NOTICE && post.getPostType() != PostType.EVENT)
+                throw new IllegalArgumentException();
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
+        }
+
+        s3Service.deleteObject(post.getImageUrl());
+        postRepository.delete(post);
+    }
+
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
         String loggedInUserId = loggedInUser.getId();
         String postCreatorId = postCreator.getId();

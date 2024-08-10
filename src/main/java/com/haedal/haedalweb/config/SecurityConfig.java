@@ -78,6 +78,7 @@ public class SecurityConfig {
                         .requestMatchers("/boards/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.GET, "/posts/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER", "MEMBER")
                         .requestMatchers(HttpMethod.POST, "/notice/posts", "/event/posts").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/notice/posts/{postId}, /event/posts/{postId}").hasAnyRole("WEB_MASTER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/boards/{boardId}/posts/{postId}").authenticated()
