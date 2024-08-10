@@ -25,7 +25,7 @@ public enum ErrorCode implements ResponseCode{
     EXIST_ACTIVITY(HttpStatus.CONFLICT, "016", "해당 학기에 활동이 존재하는 경우 삭제할 수 없습니다."),
     EXIST_BOARD(HttpStatus.CONFLICT, "017", "해당 활동에 게시판이 존재하는 경우 삭제할 수 없습니다."),
     NOT_FOUND_BOARD_ID(HttpStatus.NOT_FOUND, "018", "해당 게시판을 찾을 수 없습니다."),
-    FORBIDDEN_UPDATE(HttpStatus.FORBIDDEN, "019", "삭제 권한이 없습니다."),
+    FORBIDDEN_UPDATE(HttpStatus.FORBIDDEN, "019", "수정, 삭제 권한이 없습니다."),
     NOT_FOUND_POST_TYPE(HttpStatus.NOT_FOUND, "020", "해당 게시글 타입이 존재하지 않습니다."),
     EXIST_POST(HttpStatus.CONFLICT, "021", "해당 게시판에 게시글이 존재하는 경우 삭제할 수 없습니다."),
     NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "022", "해당 게시글을 찾을 수 없습니다.");

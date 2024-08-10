@@ -4,6 +4,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Board;
 import com.haedal.haedalweb.domain.Post;
 import com.haedal.haedalweb.domain.PostType;
+import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.request.CreatePostDTO;
 import com.haedal.haedalweb.exception.BusinessException;
@@ -22,10 +23,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final UserService userService;
+    private final S3Service s3Service;
 
     @Transactional
-    public void createPost(Long boardId, CreatePostDTO createPostDTO) { // createPost 리팩토링 해야함.
-        // Board board = boardService.findBoardById(boardId);
+    public void createPost(Long boardId, CreatePostDTO createPostDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
         PostType postType;
@@ -50,7 +51,7 @@ public class PostService {
                 .activityDate(activityDate)
                 .createDate(createDate)
                 .user(creator)
-                .board(board) // 만약 boardId를 안 받았으면, 공지사항 or 이베트 게시글임
+                .board(board)
                 .build();
 
         postRepository.save(post);
@@ -90,15 +91,29 @@ public class PostService {
     public void deletePost(Long boardId, Long postId) { // 활동 게시글 삭제 method
         Post post = postRepository.findByBoardIdAndId(boardId, postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-        //Board board = boardService.findBoardById(boardId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
 
         User loggedInUser = userService.getLoggedInUser();
         User postCreator = post.getUser();
-       // User boardCreator = board.getUser();
+        User boardCreator = board.getUser();
 
-        //validateAuthorityOfPostManagement
+        validateAuthorityOfPostManagement(loggedInUser, postCreator, boardCreator);
 
-        // 게시판 생성한 것은 팀장이므로, 게시판 생성자와 WEB_MASTER, 해구르르, 게시글 작성자만 삭제 가능
+        s3Service.deleteObject(post.getImageUrl());
+        postRepository.delete(post);
+    }
 
+    private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
+        String loggedInUserId = loggedInUser.getId();
+        String postCreatorId = postCreator.getId();
+        String boardCreatorId = boardCreator.getId();
+
+        if (!postCreatorId.equals(loggedInUserId)
+        && !boardCreatorId.equals(loggedInUserId)
+        && loggedInUser.getRole() != Role.ROLE_ADMIN
+        && loggedInUser.getRole() != Role.ROLE_WEB_MASTER) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
+        }
     }
 }

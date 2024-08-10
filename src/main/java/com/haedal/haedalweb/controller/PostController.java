@@ -72,7 +72,7 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
-    @ApiErrorCodeExamples({})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
     @Parameters({
             @Parameter(name = "boardId", description = "게시글 삭제할 활동 게시판 ID"),
             @Parameter(name = "postId", description = "해당 게시글 ID")
