@@ -17,9 +17,9 @@
 //////            @Parameter(name = "size", description = "한 페이지에 노출할 데이터 수")
 //////    })
 //////    @GetMapping
-//////    public ResponseEntity<Page<ActiveUserDTO>> getUser(@RequestParam(value = "page", defaultValue = "0") int page,
+//////    public ResponseEntity<Page<AdminUserDTO>> getUser(@RequestParam(value = "page", defaultValue = "0") int page,
 //////                                                             @RequestParam(value = "size", defaultValue = "5") int size){
-//////        Page<ActiveUserDTO> activeUsers;
+//////        Page<AdminUserDTO> activeUsers;
 //////        activeUsers = userService.getUsers(PageRequest.of(page, size, Sort.by(Order.asc("role"), Order.asc("name"))));
 //////
 //////        return ResponseEntity.ok(activeUsers);
