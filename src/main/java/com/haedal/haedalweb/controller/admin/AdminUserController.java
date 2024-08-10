@@ -3,8 +3,7 @@ package com.haedal.haedalweb.controller.admin;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.UserStatus;
-import com.haedal.haedalweb.dto.response.ActiveUserDTO;
-import com.haedal.haedalweb.dto.response.InActiveUserDTO;
+import com.haedal.haedalweb.dto.response.user.AdminUserDTO;
 import com.haedal.haedalweb.dto.request.UpdateRoleDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.admin.AdminUserService;
@@ -16,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
@@ -34,20 +35,21 @@ import java.util.List;
 public class AdminUserController {
     private final AdminUserService adminUserService;
 
-    @Operation(summary = "활동중인 User 목록")
-    @GetMapping("/active")
-    public ResponseEntity<List<ActiveUserDTO>> getActiveUser(){
-        List<ActiveUserDTO> activeUsers = adminUserService.getActiveUsers();
+    @Operation(summary = "User 목록")
+    @Parameter(name = "active", description = "활동 유저 true, 가입대기 유저 false")
+    @GetMapping
+    public ResponseEntity<List<AdminUserDTO>> getUser(@RequestParam Boolean active){
+        List<AdminUserDTO> users = null;
 
-        return ResponseEntity.ok(activeUsers);
-    }
+        if (active) {
+            Sort sort = Sort.by(Sort.Order.asc("role"), Sort.Order.asc("name"));
+            users = adminUserService.getUsers(UserStatus.ACTIVE, sort);
+        } else {
+            Sort sort = Sort.by(Sort.Order.asc("regDate"), Sort.Order.asc("name"));
+            users = adminUserService.getUsers(UserStatus.INACTIVE, sort);
+        }
 
-    @Operation(summary = "가입 대기 중인 User 목록")
-    @GetMapping("/inactive")
-    public ResponseEntity<List<InActiveUserDTO>> getInActiveUser(){
-        List<InActiveUserDTO> inActiveUsers = adminUserService.getInActiveUsers();
-
-        return ResponseEntity.ok(inActiveUsers);
+        return ResponseEntity.ok(users);
     }
 
     @Operation(summary = "가입 승인")

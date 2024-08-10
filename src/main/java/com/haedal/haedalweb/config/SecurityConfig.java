@@ -79,9 +79,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/posts/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER", "MEMBER")
                         .requestMatchers(HttpMethod.POST, "/notice/posts", "/event/posts").hasAnyRole("WEB_MASTER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER", "MEMBER")
+                        .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/activities/{activityId}/boards/{boardId}").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PATCH, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+                        .requestMatchers("/private/users").authenticated()
                         .requestMatchers("/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
                         .anyRequest().authenticated());
 

@@ -4,8 +4,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
-import com.haedal.haedalweb.dto.response.ActiveUserDTO;
-import com.haedal.haedalweb.dto.response.InActiveUserDTO;
+import com.haedal.haedalweb.dto.response.user.AdminUserDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,38 +20,20 @@ import java.util.stream.Collectors;
 public class AdminUserService {
     private final UserRepository userRepository;
 
-    public List<ActiveUserDTO> getActiveUsers() {
-        Sort sort = Sort.by(Sort.Order.asc("role"), Sort.Order.asc("name"));
-        List<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, sort);
+    public List<AdminUserDTO> getUsers(UserStatus userStatus, Sort sort) {
+        List<User> users = userRepository.findByUserStatus(userStatus, sort);
 
         return users.stream()
-                .map(this::convertToActiveUserDTO)
+                .map(this::convertToAdminUserDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<InActiveUserDTO> getInActiveUsers() {
-        Sort sort = Sort.by(Sort.Order.asc("regDate"), Sort.Order.asc("name"));
-        List<User> users = userRepository.findByUserStatus(UserStatus.INACTIVE, sort);
-
-        return users.stream()
-                .map(this::convertToInActiveUserDTO)
-                .collect(Collectors.toList());
-    }
-
-    private ActiveUserDTO convertToActiveUserDTO(User user) {
-        return ActiveUserDTO.builder()
+    private AdminUserDTO convertToAdminUserDTO(User user) {
+        return AdminUserDTO.builder()
                 .userId(user.getId())
                 .studentNumber(user.getStudentNumber())
                 .userName(user.getName())
                 .role(user.getRole().getLabel())
-                .build();
-    }
-
-    private InActiveUserDTO convertToInActiveUserDTO(User user) {
-        return InActiveUserDTO.builder()
-                .userId(user.getId())
-                .studentNumber(user.getStudentNumber())
-                .userName(user.getName())
                 .regDate(user.getRegDate())
                 .build();
     }
