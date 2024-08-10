@@ -3,7 +3,7 @@ package com.haedal.haedalweb.controller.admin;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.UserStatus;
-import com.haedal.haedalweb.dto.response.AdminUserDTO;
+import com.haedal.haedalweb.dto.response.user.AdminUserDTO;
 import com.haedal.haedalweb.dto.request.UpdateRoleDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.admin.AdminUserService;
@@ -38,7 +38,7 @@ public class AdminUserController {
     @Operation(summary = "User 목록")
     @Parameter(name = "active", description = "활동 유저 true, 가입대기 유저 false")
     @GetMapping
-    public ResponseEntity<List<AdminUserDTO>> getActiveUser(@RequestParam Boolean active){
+    public ResponseEntity<List<AdminUserDTO>> getUser(@RequestParam Boolean active){
         List<AdminUserDTO> users = null;
 
         if (active) {

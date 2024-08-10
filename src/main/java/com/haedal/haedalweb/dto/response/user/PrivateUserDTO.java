@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.dto.response;
+package com.haedal.haedalweb.dto.response.user;
 
 import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AdminUserDTO {
+public class PrivateUserDTO {
     @Schema(description = "유저 아이디", example = "haedal12")
     private String userId;
 
@@ -21,10 +21,4 @@ public class AdminUserDTO {
 
     @Schema(description = "유저 이름", example = "조대성")
     private String userName;
-
-    @Schema(description = "유저 권한", example = "(해구르르, 팀장, 일반)")
-    private String role;
-
-    @Schema(description = "가입 날짜")
-    private LocalDateTime regDate;
 }

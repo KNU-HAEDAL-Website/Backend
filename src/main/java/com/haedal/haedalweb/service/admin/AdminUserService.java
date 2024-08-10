@@ -4,7 +4,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
-import com.haedal.haedalweb.dto.response.AdminUserDTO;
+import com.haedal.haedalweb.dto.response.user.AdminUserDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
