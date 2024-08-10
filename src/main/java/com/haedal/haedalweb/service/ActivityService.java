@@ -36,8 +36,4 @@ public class ActivityService {
         return activityRepository.findById(activityId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
     }
-
-    public boolean isSemesterPresent(Long semesterId) {
-        return activityRepository.existsBySemesterId(semesterId);
-    }
 }

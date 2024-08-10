@@ -4,8 +4,8 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Semester;
 import com.haedal.haedalweb.dto.request.CreateSemesterDTO;
 import com.haedal.haedalweb.exception.BusinessException;
+import com.haedal.haedalweb.repository.ActivityRepository;
 import com.haedal.haedalweb.repository.SemesterRepository;
-import com.haedal.haedalweb.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminSemesterService {
     private final SemesterRepository semesterRepository;
-    private final ActivityService activityService;
+    private final ActivityRepository activityRepository;
 
     @Transactional
     public void createSemester(CreateSemesterDTO createSemesterDTO) {
@@ -35,7 +35,6 @@ public class AdminSemesterService {
 
         validateDeleteSemesterRequest(semesterId);
 
-        // 학기 안에 활동이 존재할 때, 에러 코드 반환하는 로직 작성
         semesterRepository.delete(semester);
     }
 
@@ -46,7 +45,7 @@ public class AdminSemesterService {
     }
 
     private void validateDeleteSemesterRequest(Long semesterId) {
-        if (activityService.isSemesterPresent(semesterId)) {
+        if (activityRepository.existsBySemesterId(semesterId)) {
             throw new BusinessException(ErrorCode.EXIST_ACTIVITY);
         }
     }

@@ -7,7 +7,6 @@ import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
 import com.haedal.haedalweb.service.PostService;
 import com.haedal.haedalweb.service.S3Service;
-import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
@@ -52,27 +51,19 @@ public class PostController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
 
-    @Operation(summary = "공지사항 게시글 생성")
+    @Operation(summary = "공지사항, 이벤트 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE})
-    @PostMapping("/notice/posts")
+    @PostMapping("/posts")
     public ResponseEntity<SuccessResponse> addNoticePost(@RequestBody @Valid CreatePostDTO createPostDTO) {
         postService.createPost(createPostDTO);
-        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
-    }
 
-    @Operation(summary = "이벤트 게시글 생성")
-    @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE})
-    @PostMapping("/event/posts")
-    public ResponseEntity<SuccessResponse> addEventPost(@RequestBody @Valid CreatePostDTO createPostDTO) {
-        postService.createPost(createPostDTO);
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
 
     @Operation(summary = "활동 게시글 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
-    @ApiErrorCodeExamples({})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
     @Parameters({
             @Parameter(name = "boardId", description = "게시글 삭제할 활동 게시판 ID"),
             @Parameter(name = "postId", description = "해당 게시글 ID")
@@ -80,6 +71,19 @@ public class PostController {
     @DeleteMapping("/boards/{boardId}/posts/{postId}")
     public ResponseEntity<SuccessResponse> deletePost(@PathVariable Long boardId, @PathVariable Long postId) {
         postService.deletePost(boardId, postId);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
+    }
+
+    @Operation(summary = "공지사항, 이벤트 게시글 삭제")
+    @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_TYPE})
+    @Parameters({
+            @Parameter(name = "postId", description = "해당 게시글 ID")
+    })
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<SuccessResponse> deleteNoticePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
