@@ -105,7 +105,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId) { // 이벤트, 공지사항 삭제
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
 
@@ -118,6 +118,11 @@ public class PostService {
 
         s3Service.deleteObject(post.getImageUrl());
         postRepository.delete(post);
+    }
+
+    @Transactional(readOnly = true)
+    public void getPosts(Long boardId) {
+
     }
 
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {

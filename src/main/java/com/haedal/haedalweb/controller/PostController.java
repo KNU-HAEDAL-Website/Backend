@@ -87,4 +87,10 @@ public class PostController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
+
+//    @Operation(summary = "활동 게시글 목록 조회")
+//    @GetMapping("/boards/{boardId}/posts")
+//    public ResponseEntity<?> getActivityPosts(@PathVariable Long boardId) {
+//
+//    }
 }
