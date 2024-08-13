@@ -30,8 +30,11 @@ public class PostDTO {
     @Schema(description = "게시글 조회수")
     private Long postViews;
 
-    @Schema(description = "활동일")
-    private LocalDate postActivityDate;
+    @Schema(description = "활동 시작일")
+    private LocalDate postActivityStartDate;
+
+    @Schema(description = "활동 종료일")
+    private LocalDate postActivityEndDate;
 
     @Schema(description = "게시글 생성일")
     private LocalDateTime postCreateDate;
