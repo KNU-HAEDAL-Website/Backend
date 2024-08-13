@@ -55,8 +55,11 @@ public class Post {
     @NonNull
     private PostType postType;
 
-    @Column(name = "post_activity_date")
-    private LocalDate activityDate;
+    @Column(name = "post_activity_start_date")
+    private LocalDate activityStartDate;
+
+    @Column(name = "post_activity_end_date")
+    private LocalDate activityEndDate;
 
     @Column(name = "post_create_date")
     @NonNull

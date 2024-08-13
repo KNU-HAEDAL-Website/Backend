@@ -19,8 +19,11 @@ public class CreatePostDTO {
     @Schema(description = "게시글 대표 이미지 파일 Url", example = "posts/abc.jpg")
     private String postImageUrl;
 
-    @Schema(description = "활동일", example = "yyyy-MM-dd (2024-07-24)")
-    private String postActivityDate;
+    @Schema(description = "활동 시작일", example = "yyyy-MM-dd (2024-07-24)")
+    private String postActivityStartDate;
+
+    @Schema(description = "활동 종료일", example = "yyyy-MM-dd (2024-07-24)")
+    private String postActivityEndDate;
 
     @Schema(description = "게시글 타입", example = "(ACTIVITY, NOTICE, EVENT)")
     private String postType;

@@ -38,7 +38,8 @@ public class PostService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
         }
 
-        LocalDate activityDate = LocalDate.parse(createPostDTO.getPostActivityDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
         LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
 
@@ -48,7 +49,8 @@ public class PostService {
                 .imageUrl(createPostDTO.getPostImageUrl()) // 이미지 생성 Controller 만들기
                 .views(0L)
                 .postType(postType)
-                .activityDate(activityDate)
+                .activityStartDate(activityStartDate)
+                .activityEndDate(activityEndDate)
                 .createDate(createDate)
                 .user(creator)
                 .board(board)
@@ -69,7 +71,8 @@ public class PostService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
         }
 
-        LocalDate activityDate = LocalDate.parse(createPostDTO.getPostActivityDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
         LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
 
@@ -79,7 +82,8 @@ public class PostService {
                 .imageUrl(createPostDTO.getPostImageUrl()) // 이미지 생성 Controller 만들기
                 .views(0L)
                 .postType(postType)
-                .activityDate(activityDate)
+                .activityStartDate(activityStartDate)
+                .activityEndDate(activityEndDate)
                 .createDate(createDate)
                 .user(creator)
                 .build();
