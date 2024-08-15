@@ -7,10 +7,14 @@ import com.haedal.haedalweb.domain.PostType;
 import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.request.CreatePostDTO;
+import com.haedal.haedalweb.dto.response.PostDTO;
+import com.haedal.haedalweb.dto.response.PostSummaryDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.BoardRepository;
 import com.haedal.haedalweb.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -125,8 +129,29 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public void getPosts(Long boardId) {
+    public Page<PostSummaryDTO> getPosts(Long boardId, Pageable pageable) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+        Page<Post> postPage = postRepository.findPostsByBoard(board, pageable);
 
+        return postPage.map(post -> convertToPostSummaryDTO(post, board));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostSummaryDTO> getPosts(String pType, Pageable pageable) {
+        PostType postType;
+
+        try {
+            postType = PostType.valueOf(pType.toUpperCase());
+            if (postType != PostType.NOTICE && postType != PostType.EVENT)
+                throw new IllegalArgumentException();
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
+        }
+
+        Page<Post> postPage = postRepository.findPostsByPostType(postType, pageable);
+
+        return postPage.map(post -> convertToPostSummaryDTO(post));
     }
 
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
@@ -140,5 +165,39 @@ public class PostService {
         && loggedInUser.getRole() != Role.ROLE_WEB_MASTER) {
             throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
         }
+    }
+
+    private PostSummaryDTO convertToPostSummaryDTO(Post post, Board board) {
+        return PostSummaryDTO.builder()
+                .postId(post.getId())
+                .postTitle(post.getTitle())
+                .postViews(post.getViews())
+                .postActivityStartDate(post.getActivityStartDate())
+                .postActivityEndDate(post.getActivityEndDate())
+                .postCreateDate(post.getCreateDate())
+                .userId(post.getUser().getId())
+                .userName(post.getUser().getName())
+                .boardId(board.getId())
+                .boardName(board.getName())
+                .build();
+    }
+
+    private PostSummaryDTO convertToPostSummaryDTO(Post post) {
+        PostSummaryDTO postSummaryDTO = PostSummaryDTO.builder()
+                .postId(post.getId())
+                .postTitle(post.getTitle())
+                .postViews(post.getViews())
+                .postActivityStartDate(post.getActivityStartDate())
+                .postActivityEndDate(post.getActivityEndDate())
+                .postCreateDate(post.getCreateDate())
+                .userId(post.getUser().getId())
+                .userName(post.getUser().getName())
+                .build();
+
+//        if (post.getPostType() == PostType.EVENT) {
+//            postSummaryDTO.setPostImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()));
+//        }
+
+        return postSummaryDTO;
     }
 }

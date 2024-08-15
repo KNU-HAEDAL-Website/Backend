@@ -3,7 +3,6 @@ package com.haedal.haedalweb.dto.response;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -18,15 +17,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostDTO {
+public class PostSummaryDTO {
     @Schema(description = "게시글 id")
     private Long postId;
 
     @Schema(description = "게시글 제목")
     private String postTitle;
-
-    @Schema(description = "게시글 내용")
-    private String postContent;
 
     @Schema(description = "게시글 대표 이미지 파일 Url")
     private URL postImageUrl;
