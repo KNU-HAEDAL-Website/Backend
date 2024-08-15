@@ -4,6 +4,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.dto.request.CreatePostDTO;
 import com.haedal.haedalweb.dto.response.PostDTO;
+import com.haedal.haedalweb.dto.response.PostSliderDTO;
 import com.haedal.haedalweb.dto.response.PostSummaryDTO;
 import com.haedal.haedalweb.dto.response.PreSignedUrlDTO;
 import com.haedal.haedalweb.dto.response.common.SuccessResponse;
@@ -135,5 +136,18 @@ public class PostController {
         PostDTO post = postService.getPost(postId);
 
         return ResponseEntity.ok(post);
+    }
+
+    @Operation(summary = "이벤트 게시글 슬라이더 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "조회 할 page, default: 0"),
+            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
+    })
+    @GetMapping("/posts/slider")
+    public ResponseEntity<Page<PostSliderDTO>> getSliderPosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                              @RequestParam(name = "size", defaultValue = "5") Integer size) {
+        Page<PostSliderDTO> posts = postService.getSliderPosts(PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+
+        return ResponseEntity.ok(posts);
     }
 }

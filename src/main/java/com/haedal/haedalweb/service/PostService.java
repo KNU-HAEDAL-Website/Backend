@@ -8,6 +8,7 @@ import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.dto.request.CreatePostDTO;
 import com.haedal.haedalweb.dto.response.PostDTO;
+import com.haedal.haedalweb.dto.response.PostSliderDTO;
 import com.haedal.haedalweb.dto.response.PostSummaryDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.BoardRepository;
@@ -196,6 +197,13 @@ public class PostService {
         return postDTO;
     }
 
+    @Transactional(readOnly = true)
+    public Page<PostSliderDTO> getSliderPosts(Pageable pageable) {
+        Page<Post> postPage = postRepository.findPostsByPostType(PostType.EVENT, pageable);
+
+        return postPage.map((post) -> convertToPostSliderDTO(post));
+    }
+
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
         String loggedInUserId = loggedInUser.getId();
         String postCreatorId = postCreator.getId();
@@ -236,10 +244,16 @@ public class PostService {
                 .userName(post.getUser().getName())
                 .build();
 
-//        if (post.getPostType() == PostType.EVENT) {
-//            postSummaryDTO.setPostImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()));
-//        }
-
         return postSummaryDTO;
+    }
+
+    private PostSliderDTO convertToPostSliderDTO(Post post) {
+        PostSliderDTO postSliderDTO = PostSliderDTO.builder()
+                .postId(post.getId())
+                .postTitle(post.getTitle())
+                .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
+                .build();
+
+        return postSliderDTO;
     }
 }
