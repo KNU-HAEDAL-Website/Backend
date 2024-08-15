@@ -154,6 +154,48 @@ public class PostService {
         return postPage.map(post -> convertToPostSummaryDTO(post));
     }
 
+    @Transactional
+    public PostDTO getPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+
+        post.setViews(post.getViews()+1);
+        postRepository.save(post);
+
+        PostDTO postDTO;
+        if (post.getPostType() == PostType.ACTIVITY) {
+            postDTO = PostDTO.builder()
+                    .postId(post.getId())
+                    .postTitle(post.getTitle())
+                    .postContent(post.getContent())
+                    .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
+                    .postViews(post.getViews())
+                    .postActivityStartDate(post.getActivityStartDate())
+                    .postActivityEndDate(post.getActivityEndDate())
+                    .userId(post.getUser().getId())
+                    .userName(post.getUser().getName())
+                    .boardId(post.getBoard().getId())
+                    .boardName(post.getBoard().getName())
+                    .build();
+
+            return postDTO;
+        }
+
+        postDTO = PostDTO.builder()
+                .postId(post.getId())
+                .postTitle(post.getTitle())
+                .postContent(post.getContent())
+                .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
+                .postViews(post.getViews())
+                .postActivityStartDate(post.getActivityStartDate())
+                .postActivityEndDate(post.getActivityEndDate())
+                .userId(post.getUser().getId())
+                .userName(post.getUser().getName())
+                .build();
+
+        return postDTO;
+    }
+
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
         String loggedInUserId = loggedInUser.getId();
         String postCreatorId = postCreator.getId();

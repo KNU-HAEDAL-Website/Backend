@@ -124,4 +124,16 @@ public class PostController {
 
         return ResponseEntity.ok(posts);
     }
+
+    @Operation(summary = "게시글 단일 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
+    @Parameters({
+            @Parameter(name = "postId", description = "해당 게시글 ID")
+    })
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDTO> getPost(@PathVariable Long postId) {
+        PostDTO post = postService.getPost(postId);
+
+        return ResponseEntity.ok(post);
+    }
 }

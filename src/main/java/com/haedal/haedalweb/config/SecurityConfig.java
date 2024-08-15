@@ -85,7 +85,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/activities/{activityId}/boards/{boardId}").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PATCH, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers("/private/users").authenticated()
-                        .requestMatchers("/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
+                        .requestMatchers("/posts/{postId}","/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록
