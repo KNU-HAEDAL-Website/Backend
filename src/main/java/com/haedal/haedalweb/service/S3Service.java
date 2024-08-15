@@ -32,6 +32,7 @@ public class S3Service {
     }
 
     public URL generatePreSignedGetUrl(String objectKey) {
+        if (objectKey == null) return null;
         return s3Operations.createSignedGetURL(bucketName, objectKey, Duration.ofMinutes(10));
     }
 
