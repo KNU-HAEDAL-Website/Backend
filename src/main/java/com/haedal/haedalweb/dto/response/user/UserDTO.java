@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AdminUserDTO {
+public class UserDTO {
     @Schema(description = "유저 아이디", example = "haedal12")
     private String userId;
 

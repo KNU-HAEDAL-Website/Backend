@@ -4,9 +4,10 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.Role;
 import com.haedal.haedalweb.domain.User;
 import com.haedal.haedalweb.domain.UserStatus;
-import com.haedal.haedalweb.dto.response.user.AdminUserDTO;
+import com.haedal.haedalweb.dto.response.user.UserDTO;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.repository.UserRepository;
+import com.haedal.haedalweb.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,23 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class AdminUserService {
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public List<AdminUserDTO> getUsers(UserStatus userStatus, Sort sort) {
+    public List<UserDTO> getUsers(UserStatus userStatus, Sort sort) {
         List<User> users = userRepository.findByUserStatus(userStatus, sort);
 
         return users.stream()
-                .map(this::convertToAdminUserDTO)
+                .map(userService::convertToUserDTO)
                 .collect(Collectors.toList());
-    }
-
-    private AdminUserDTO convertToAdminUserDTO(User user) {
-        return AdminUserDTO.builder()
-                .userId(user.getId())
-                .studentNumber(user.getStudentNumber())
-                .userName(user.getName())
-                .role(user.getRole().getLabel())
-                .regDate(user.getRegDate())
-                .build();
     }
 
     @Transactional
