@@ -1,6 +1,5 @@
 package com.haedal.haedalweb.dto.response.user;
 
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PrivateUserDTO {
+public class UserSummaryDTO {
     @Schema(description = "유저 아이디", example = "haedal12")
     private String userId;
 
