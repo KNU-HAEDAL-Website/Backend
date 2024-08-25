@@ -50,7 +50,7 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
     @Parameter(name = "boardId", description = "게시글 추가할 게시판 ID")
     @PostMapping("/boards/{boardId}/posts")
     public ResponseEntity<SuccessResponse> addPost(@PathVariable Long boardId, @RequestBody @Valid CreatePostDTO createPostDTO) {
@@ -60,7 +60,7 @@ public class PostController {
 
     @Operation(summary = "공지사항, 이벤트 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
     @PostMapping("/posts")
     public ResponseEntity<SuccessResponse> addNoticePost(@RequestBody @Valid CreatePostDTO createPostDTO) {
         postService.createPost(createPostDTO);
