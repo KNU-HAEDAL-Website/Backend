@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,8 +45,19 @@ public class PostService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
         }
 
-        LocalDate activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-        LocalDate activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityStartDate = null;
+        LocalDate activityEndDate = null;
+
+        try {
+            activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+        } catch (DateTimeException e) {
+            throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
+        }
+
+        if (createPostDTO.getPostActivityEndDate() != null) {
+            activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+        }
+
         LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
 
@@ -76,10 +89,22 @@ public class PostService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
         }
 
-        LocalDate activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-        LocalDate activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+        LocalDate activityStartDate = null;
+        LocalDate activityEndDate = null;
         LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
+
+        if (postType == PostType.EVENT) {
+            try {
+                activityStartDate = LocalDate.parse(createPostDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+            } catch (DateTimeException e) {
+                throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
+            }
+
+            if (createPostDTO.getPostActivityEndDate() != null) {
+                activityEndDate = LocalDate.parse(createPostDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+            }
+        }
 
         Post post = Post.builder()
                 .title(createPostDTO.getPostTitle())

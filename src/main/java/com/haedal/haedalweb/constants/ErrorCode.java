@@ -28,7 +28,8 @@ public enum ErrorCode implements ResponseCode{
     FORBIDDEN_UPDATE(HttpStatus.FORBIDDEN, "019", "수정, 삭제 권한이 없습니다."),
     NOT_FOUND_POST_TYPE(HttpStatus.NOT_FOUND, "020", "해당 게시글 타입이 존재하지 않습니다."),
     EXIST_POST(HttpStatus.CONFLICT, "021", "해당 게시판에 게시글이 존재하는 경우 삭제할 수 없습니다."),
-    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "022", "해당 게시글을 찾을 수 없습니다.");
+    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "022", "해당 게시글을 찾을 수 없습니다."),
+    INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "023", "인자 값이 누락되었거나 잘못된 형식입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
