@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.FAILED_LOGIN.getMessage()));
 
-        if (user.getUserStatus() == UserStatus.DELETED) {
+        if (user.getUserStatus() == UserStatus.DELETED || user.getUserStatus() == UserStatus.INACTIVE) {
             throw new UsernameNotFoundException(ErrorCode.FAILED_LOGIN.getMessage());
         }
 
