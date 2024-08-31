@@ -106,7 +106,7 @@ public class PostController {
     public ResponseEntity<Page<PostSummaryDTO>>  getActivityPosts(@PathVariable Long boardId,
                                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                       @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        Page<PostSummaryDTO> posts = postService.getPosts(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
+        Page<PostSummaryDTO> posts = postService.getPosts(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
         return ResponseEntity.ok(posts);
     }
@@ -121,7 +121,7 @@ public class PostController {
     public ResponseEntity<Page<PostSummaryDTO>>  getActivityPosts(@RequestParam(name = "postType") String postType,
                                                                   @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                   @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        Page<PostSummaryDTO> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
+        Page<PostSummaryDTO> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
         return ResponseEntity.ok(posts);
     }
