@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
                 version = "1.0")
 
 )
-@Profile("dev")
 @Configuration
 public class SwaggerConfig {
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
