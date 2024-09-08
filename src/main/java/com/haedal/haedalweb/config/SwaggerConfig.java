@@ -23,6 +23,7 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -43,13 +44,19 @@ import java.util.stream.Collectors;
                 version = "1.0")
 
 )
-@Profile(value = "!prod")
 @Configuration
 public class SwaggerConfig {
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
 
+    @Value("${swagger.enabled}")
+    private boolean swaggerEnabled;
+
     @Bean
     public OpenAPI openAPI() {
+        if (!swaggerEnabled) {
+            return null;
+        }
+
         String accessToken = "Access Token (Bearer)";
 
         SecurityRequirement securityRequirement = new SecurityRequirement()
