@@ -47,9 +47,7 @@ import java.util.stream.Collectors;
 @Configuration
 public class SwaggerConfig {
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
-
-    @Value("${swagger.enabled}")
-    private boolean swaggerEnabled;
+    private static boolean swaggerEnabled = false;
 
     @Bean
     public OpenAPI openAPI() {
