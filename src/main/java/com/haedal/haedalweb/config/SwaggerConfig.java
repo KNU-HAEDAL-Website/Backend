@@ -23,14 +23,12 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OperationCustomizer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.FieldError;
 import org.springframework.web.method.HandlerMethod;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,14 +45,10 @@ import java.util.stream.Collectors;
 @Configuration
 public class SwaggerConfig {
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
-    private static boolean swaggerEnabled = false;
 
     @Bean
+    @Profile("!prod")
     public OpenAPI openAPI() {
-        if (!swaggerEnabled) {
-            return null;
-        }
-
         String accessToken = "Access Token (Bearer)";
 
         SecurityRequirement securityRequirement = new SecurityRequirement()
