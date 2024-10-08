@@ -28,6 +28,7 @@ public class S3Service {
     }
 
     public void deleteObject(String key) {
+        if (key == null) return;
         s3Operations.deleteObject(bucketName, key);
     }
 
