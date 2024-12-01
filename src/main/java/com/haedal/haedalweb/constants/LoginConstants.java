@@ -15,7 +15,7 @@ public final class LoginConstants {
     public static final String ROLE_CLAIM = "role";
     public static final String CATEGORY_CLAIM = "category";
 
-    public static final long ACCESS_TOKEN_EXPIRATION_TIME_MS = 3600*1000; // 1 hour
+    public static final long ACCESS_TOKEN_EXPIRATION_TIME_MS = 60*1000; // 1 hour
     public static final long REFRESH_TOKEN_EXPIRATION_TIME_MS = 86400*1000; // 1 day
     public static final long REFRESH_TOKEN_EXPIRATION_TIME_S = 86400; // 1day
 }
